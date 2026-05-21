@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduSpace | Panel de Control</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+        <a href="index.html" style="text-decoration:none; color:inherit;">
+            <span class="logo-edu">Edu</span><span class="logo-space">Space</span>
+        </a>
+    </div>
+    <nav class="sidebar-nav">
+        <a class="sidebar-link active" onclick="mostrarPanel('resumen')" data-panel="resumen">
+            <span class="si">📊</span> Resumen
+        </a>
+
+        <a class="sidebar-link" onclick="mostrarPanel('habitaciones')" data-panel="habitaciones">
+            <span class="si">🏠</span> Habitaciones
+        </a>
+        <a class="sidebar-link" onclick="mostrarPanel('pagos')" data-panel="pagos">
+            <span class="si">💳</span> Pagos
+        </a>
+        <a class="sidebar-link" onclick="mostrarPanel('reportes')" data-panel="reportes">
+            <span class="si">🔧</span> Reportes
+        </a>
+    </nav>
+    <div class="sidebar-bottom">
+        <div class="sidebar-user" id="sidebarUser">
+            <div class="su-avatar" id="suAvatar">?</div>
+            <div>
+                <strong id="suNombre">Usuario</strong>
+                <small id="suRol">Inquilino</small>
+            </div>
+        </div>
+        <button class="btn-logout" onclick="cerrarSesion()">🚪 Salir</button>
+    </div>
+</aside>
+
+<div class="dashboard-main">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+        <button class="hamburger-dash" onclick="toggleSidebar()">☰</button>
+        <div class="topbar-title" id="topbarTitle">Dashboard</div>
+        <div class="topbar-right">
+            <span class="topbar-fecha" id="fechaHoy"></span>
+            <div class="notif-btn" onclick="toggleNotif()">
+                🔔 <span class="notif-badge" id="notifBadge">0</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- PANEL: RESUMEN -->
+    <div class="panel activo" id="panel-resumen">
+        <h2 class="panel-title">Bienvenido, <span id="welcomeName">Usuario</span> 👋</h2>
+
+        <div class="kpi-grid">
+           
+            <div class="kpi-card rojo">
+                <div class="kpi-icon">🏠</div>
+                <div class="kpi-info">
+                    <span class="kpi-num" id="totalHabitaciones">0</span>
+                    <span class="kpi-label">Habitacion</span>
+                </div>
+            </div>
+            <div class="kpi-card amarillo">
+                <div class="kpi-icon">💰</div>
+                <div class="kpi-info">
+                    <span class="kpi-num" id="totalPagos">$0</span>
+                    <span class="kpi-label">Mis Pagos</span>
+                </div>
+            </div>
+            <div class="kpi-card verde">
+                <div class="kpi-icon">🔧</div>
+                <div class="kpi-info">
+                    <span class="kpi-num" id="totalReportes">0</span>
+                    <span class="kpi-label">Reportes Enviados</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="resumen-bottom">
+            <div class="actividad-reciente">
+                <h3>Actividad reciente</h3>
+                <div class="actividad-lista" id="actividadLista">
+                    <div class="actividad-item">
+                        <span class="act-icon">📝</span>
+                        <div>
+                            <strong>Sistema iniciado</strong>
+                            <small>Bienvenido a EduSpace</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PANEL: INQUILINOS -->
+    <div class="panel" id="panel-inquilinos">
+        <div class="panel-header">
+            <h2 class="panel-title">Gestión de Inquilinos</h2>
+            <button class="btn-add" onclick="abrirModalInquilino()">+ Agregar Inquilino</button>
+        </div>
+        <div class="search-bar">
+            <input type="text" id="buscarInquilino" placeholder="🔍 Buscar inquilino..." oninput="renderInquilinos()">
+        </div>
+        <div class="table-wrapper">
+            <table class="data-table" id="tablaInquilinos">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Habitación</th>
+                        <th>Estado pago</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="bodyInquilinos">
+                    <tr><td colspan="5" class="empty-row">No hay inquilinos registrados</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- PANEL: HABITACIONES -->
+    <div class="panel" id="panel-habitaciones">
+        <div class="panel-header">
+            <h2 class="panel-title">Mi habitación</h2>
+        </div>
+        <div class="habitaciones-grid" id="habitacionesGrid">
+            <div class="empty-state">No hay habitaciones. Haz clic en "+ Nueva Habitación" para comenzar.</div>
+        </div>
+    </div>
+
+    <!-- PANEL: PAGOS -->
+    <div class="panel" id="panel-pagos">
+        <div class="panel-header">
+            <h2 class="panel-title">Gestión de Pagos</h2>
+            <button class="btn-add" onclick="abrirModalPago()">+ Registrar Pago</button>
+        </div>
+        <div class="table-wrapper">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Administrador</th>
+                        <th>Habitación</th>
+                        <th>Monto</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="bodyPagos">
+                    <tr><td colspan="6" class="empty-row">No hay pagos registrados</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- PANEL: REPORTES -->
+    <div class="panel" id="panel-reportes">
+        <div class="panel-header">
+            <h2 class="panel-title">Reportes de Mantenimiento</h2>
+        </div>
+        <div class="contacto-form-wrapper">
+                <h3>Reportar un daño / Mantenimiento</h3>
+                <form class="contacto-form" id="formContacto" onsubmit="enviarReporte(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="rep-nombre">Nombre completo</label>
+                            <input type="text" id="rep-nombre" placeholder="Tu nombre" required aria-label="Nombre completo del reportante">
+                        </div>
+                        <div class="form-group">
+                            <label for="rep-hab">Habitación / Casa</label>
+                            <input type="text" id="rep-hab" placeholder="Ej: Hab. 101" required aria-label="Número de habitación o casa">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="rep-tipo">Tipo de reporte</label>
+                        <select id="rep-tipo" aria-label="Tipo de reporte de mantenimiento" required>
+                            <option value="">Selecciona el tipo</option>
+                            <option value="daño">🔧 Daño físico</option>
+                            <option value="plomeria">💧 Plomería</option>
+                            <option value="electrico">⚡ Eléctrico</option>
+                            <option value="seguridad">🔒 Seguridad</option>
+                            <option value="limpieza">🧹 Limpieza</option>
+                            <option value="otro">📋 Otro</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Prioridad</label>
+                        <div class="prioridad-btns">
+                            <label class="prioridad-label">
+                                <input type="radio" id="prioridad-baja" name="prioridad" value="baja"> 🟢 Baja
+                            </label>
+                            <label class="prioridad-label">
+                                <input type="radio" id="prioridad-media" name="prioridad" value="media" checked> 🟡 Media
+                            </label>
+                            <label class="prioridad-label">
+                                <input type="radio" id="prioridad-alta" name="prioridad" value="alta"> 🔴 Alta
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="rep-desc">Descripción del problema</label>
+                        <textarea id="rep-desc" rows="4" placeholder="Describe detalladamente el daño o mantenimiento requerido..." required aria-label="Descripción del problema de mantenimiento"></textarea>
+                    </div>
+                    <button type="submit" class="btn-submit">
+                        <span id="btnReporteText">📤 Enviar Reporte al Sistema</span>
+                    </button>
+                </form>
+
+                <div class="reportes-recientes" id="reportesRecientes" style="display:none">
+                    <h4>📋 Tus reportes recientes</h4>
+                    <div id="listaReportes"></div>
+                </div>
+            </div>
+        <div class="reportes-lista" id="reportesLista">
+            <div class="empty-state">No hay reportes pendientes.</div>
+        </div>
+    </div>
+
+</div>
+
+<!-- MODAL HABITACION -->
+<div class="modal-overlay" id="modalHabitacion" onclick="cerrarModalExtra(event, 'modalHabitacion')">
+    <div class="modal-content">
+        <button class="cerrar-modal" onclick="document.getElementById('modalHabitacion').style.display='none'">✕</button>
+        <h3>Nueva Habitación</h3>
+        <form id="formHabitacion" onsubmit="guardarHabitacion(event)">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Número / Nombre</label>
+                    <input type="text" id="hab-num" required placeholder="Ej: Hab. 101">
+                </div>
+                <div class="form-group">
+                    <label>Casa / Edificio</label>
+                    <input type="text" id="hab-casa" required placeholder="Ej: Casa Central">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Precio/mes</label>
+                    <input type="number" id="hab-precio" required placeholder="450000">
+                </div>
+                <div class="form-group">
+                    <label>Estado</label>
+                    <select id="hab-estado" aria-label="Estado de la habitación">
+                        <option value="disponible">🟢 Disponible</option>
+                        <option value="ocupada">🔴 Ocupada</option>
+                        <option value="mantenimiento">🟡 Mantenimiento</option>
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="btn-submit">Guardar Habitación</button>
+        </form>
+    </div>
+</div>
+
+<!-- MODAL PAGO -->
+<div class="modal-overlay" id="modalPago" onclick="cerrarModalExtra(event, 'modalPago')">
+    <div class="modal-content">
+        <button class="cerrar-modal" onclick="document.getElementById('modalPago').style.display='none'">✕</button>
+        <h3>Realizar un Pago</h3>
+        <form id="formPago" onsubmit="guardarPago(event)">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="pago-inquilino">Administrador</label>
+                    <input type="text" id="pago-inquilino" required placeholder="Nombre del administrador">
+                </div>
+                <div class="form-group">
+                    <label for="pago-hab">Habitación</label>
+                    <input type="text" id="pago-hab" required placeholder="Ej: Hab. 101">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="pago-monto">Monto ($COP)</label>
+                    <input type="number" id="pago-monto" required placeholder="450000" aria-label="Monto en pesos colombianos">
+                </div>
+                <div class="form-group">
+                    <label for="pago-mes">Mes de pago</label>
+                    <input type="text" id="pago-mes" required placeholder="YYYY-MM" aria-label="Mes de pago formato YYYY-MM" pattern="\d{4}-\d{2}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="pago-estado">Estado</label>
+                <select id="pago-estado" aria-label="Estado del pago">
+                    <option value="pagado">✅ Pagado</option>
+                    <option value="pendiente">🕐 Pendiente</option>
+                    <option value="mora">⚠️ Mora</option>
+                </select>
+            </div>
+            <button type="submit" class="btn-submit">Registrar Pago</button>
+        </form>
+    </div>
+</div>
+
+<div class="toast" id="toastDash"></div>
+
+<script src="js/dashboard.js"></script>
+</body>
+</html>
