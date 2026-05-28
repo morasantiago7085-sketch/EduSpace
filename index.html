@@ -23,7 +23,8 @@
         <ul class="nav-links" id="navLinks">
             <li><a onclick="navegar('inicio')" data-page="inicio" class="nav-link active">Inicio</a></li>
             <li><a onclick="navegar('quienes-somos')" data-page="quienes-somos" class="nav-link">Quiénes Somos</a></li>
-            <li><a onclick="navegar('galeria')" data-page="galeria" class="nav-link">Inmuebles</a></li>
+            <li><a onclick="navegar('inmuebles')" data-page="inmuebles" class="nav-link">Inmuebles</a></li>
+            <li><a onclick="navegar('precios')" data-page="precios" class="nav-link">Precios</a></li>
             <li><a onclick="navegar('contacto')" data-page="contacto" class="nav-link">Contacto</a></li>
         </ul>
 
@@ -73,7 +74,7 @@
                 <span class="stat-label">% Satisfacción</span>
             </div>
             <div class="stat-card">
-                <span class="stat-num counter" data-target="3">0</span>
+                <span class="stat-num counter" data-target="4">0</span>
                 <span class="stat-label">Ciudades en Colombia</span>
             </div>
         </div>
@@ -152,14 +153,7 @@
                 </div>
             </div>
         </div>
-
-        <!-- CTA FINAL -->
-        <div class="cta-banner">
-            <h2>¿Listo para digitalizar tu residencia?</h2>
-            <p>Únete a más de 150 administradores que ya confían en EduSpace</p>
-            <button class="btn-cta-primary" onclick="abrirModal('registro')">Crear cuenta gratis</button>
-        </div>
-
+     
     </section>
 
     <!-- SECCIÓN: QUIÉNES SOMOS -->
@@ -245,122 +239,73 @@
     </section>
 
     <!-- SECCIÓN: GALERÍA -->
-    <section id="galeria" class="seccion">
+    <section id="inmuebles" class="seccion">
         <div class="page-header">
             <h2>Tu furuto <span>Espacio</span></h2>
             <p>Conoce las residencias que gestionamos en EduSpace</p>
         </div>
 
-        <div class="galeria-filtros">
-            <button class="filtro-btn active" onclick="filtrarGaleria('todas', this)">Todas</button>
-            <button class="filtro-btn" onclick="filtrarGaleria('disponible', this)">🟢 Disponibles</button>
-            <button class="filtro-btn" onclick="filtrarGaleria('ocupada', this)">🔴 Ocupadas</button>
-            <button class="filtro-btn" onclick="filtrarGaleria('mantenimiento', this)">🟡 Mantenimiento</button>
+        <div class="inmuebles-filtros">
+            <button class="filtro-btn active" onclick="filtrarInmuebles('todas', this)">Todas</button>
+            <button class="filtro-btn" onclick="filtrarInmuebles('disponible', this)">🟢 Disponibles</button>
+            <button class="filtro-btn" onclick="filtrarInmuebles('ocupada', this)">🔴 Ocupadas</button>
+
         </div>
 
-        <div class="galeria-grid" id="galeriaGrid">
-            <div class="galeria-card" data-estado="disponible">
-                <div class="galeria-img" style="background: linear-gradient(135deg, #034C8C22, #034C8C44)">
-                    <span class="galeria-emoji">🛏️</span>
-                    <div class="galeria-badge disponible">Disponible</div>
+        <div class="inmuebles-grid" id="inmueblesGrid">
+            <!-- Aquí se agregarán los inmuebles reales -->
+        </div>
+    </section>
+
+    <!-- SECCIÓN: PRECIOS -->
+    <section id="precios" class="seccion">
+        <div class="page-header">
+            <h2>Planes y <span>Precios</span></h2>
+            <p>Elige el plan que se adapta a tu rol en EduSpace</p>
+        </div>
+        <div class="precios-grid">
+
+            <!-- Plan Estudiante -->
+            <div class="precio-card">
+                <div class="precio-icono">🎓</div>
+                <h3 class="precio-nombre">Estudiante</h3>
+                <p class="precio-subtitulo">Arrendatario / Inquilino</p>
+                <div class="precio-monto">
+                    <span class="precio-simbolo">$</span>
+                    <span class="precio-valor">0</span>
+                    <span class="precio-periodo">COP / mes</span>
                 </div>
-                <div class="galeria-info">
-                    <h3>Casa Central · Hab. 101</h3>
-                    <p>Habitación individual con baño privado, escritorio y closet. Luz y agua incluidas.</p>
-                    <div class="galeria-tags">
-                        <span>📶 WiFi</span><span>🚿 Baño privado</span><span>📚 Escritorio</span>
-                    </div>
-                    <div class="galeria-footer">
-                        <strong class="precio">$450.000/mes</strong>
-                        <button class="btn-ver" onclick="abrirModal('registro')">Solicitar</button>
-                    </div>
-                </div>
+                <p class="precio-slogan">Encuentra tu espacio ideal sin costo</p>
+                <ul class="precio-features">
+                    <li>✅ Buscar y explorar habitaciones</li>
+                    <li>✅ Ver disponibilidad en tiempo real</li>
+                    <li>✅ Contactar arrendadores</li>
+                    <li>✅ Seguimiento de tus pagos</li>
+                    <li>✅ Reportar daños o novedades</li>
+                </ul>
             </div>
-            <div class="galeria-card" data-estado="ocupada">
-                <div class="galeria-img" style="background: linear-gradient(135deg, #BF112022, #BF112044)">
-                    <span class="galeria-emoji">🏠</span>
-                    <div class="galeria-badge ocupada">Ocupada</div>
+
+            <!-- Plan Arrendador -->
+            <div class="precio-card precio-card-destacado">
+                <div class="precio-icono">🏘️</div>
+                <h3 class="precio-nombre">Arrendador</h3>
+                <p class="precio-subtitulo">Dueño del Inmueble</p>
+                <div class="precio-monto">
+                    <span class="precio-simbolo">$</span>
+                    <span class="precio-valor">49.900</span>
+                    <span class="precio-periodo">COP / mes</span>
                 </div>
-                <div class="galeria-info">
-                    <h3>Coliving Norte · Hab. 203</h3>
-                    <p>Espacio compartido de 2 personas, cocina comunitaria y sala de estudio 24/7.</p>
-                    <div class="galeria-tags">
-                        <span>👥 Compartida</span><span>🍳 Cocina</span><span>📖 Estudio</span>
-                    </div>
-                    <div class="galeria-footer">
-                        <strong class="precio">$320.000/mes</strong>
-                        <button class="btn-ver ocupado" disabled>No disponible</button>
-                    </div>
-                </div>
+                <p class="precio-slogan">Gestiona tus inmuebles sin complicaciones</p>
+                <ul class="precio-features">
+                    <li>✅ Publicar habitaciones ilimitadas</li>
+                    <li>✅ Panel de control completo</li>
+                    <li>✅ Gestión de inquilinos</li>
+                    <li>✅ Registro y control de pagos</li>
+                    <li>✅ Reportes de mantenimiento</li>
+                    <li>✅ Estadísticas de ocupación</li>
+                </ul>
             </div>
-            <div class="galeria-card" data-estado="disponible">
-                <div class="galeria-img" style="background: linear-gradient(135deg, #F2AB2722, #F2AB2744)">
-                    <span class="galeria-emoji">🎓</span>
-                    <div class="galeria-badge disponible">Disponible</div>
-                </div>
-                <div class="galeria-info">
-                    <h3>Residencia Universitaria · Hab. 305</h3>
-                    <p>Habitación premium cerca a la Universidad de Antioquia. Amoblada completamente.</p>
-                    <div class="galeria-tags">
-                        <span>🏫 Cerca campus</span><span>🛋️ Amoblada</span><span>🔒 Segura</span>
-                    </div>
-                    <div class="galeria-footer">
-                        <strong class="precio">$580.000/mes</strong>
-                        <button class="btn-ver" onclick="abrirModal('registro')">Solicitar</button>
-                    </div>
-                </div>
-            </div>
-            <div class="galeria-card" data-estado="mantenimiento">
-                <div class="galeria-img" style="background: linear-gradient(135deg, #88888822, #88888844)">
-                    <span class="galeria-emoji">🔧</span>
-                    <div class="galeria-badge mantenimiento">Mantenimiento</div>
-                </div>
-                <div class="galeria-info">
-                    <h3>Casa Central · Hab. 102</h3>
-                    <p>Temporalmente en reparación. Disponible pronto. Remodelación total del baño.</p>
-                    <div class="galeria-tags">
-                        <span>🔨 En reparación</span><span>📅 Lista pronto</span>
-                    </div>
-                    <div class="galeria-footer">
-                        <strong class="precio">$450.000/mes</strong>
-                        <button class="btn-ver ocupado" disabled>En obras</button>
-                    </div>
-                </div>
-            </div>
-            <div class="galeria-card" data-estado="disponible">
-                <div class="galeria-img" style="background: linear-gradient(135deg, #034C8C22, #F2AB2744)">
-                    <span class="galeria-emoji">🌟</span>
-                    <div class="galeria-badge disponible">Disponible</div>
-                </div>
-                <div class="galeria-info">
-                    <h3>Coliving Sur · Hab. 401</h3>
-                    <p>Estudio tipo loft con balcón. La más nueva del catálogo. Piso 4 con vista.</p>
-                    <div class="galeria-tags">
-                        <span>🌇 Vista</span><span>🏗️ Nueva</span><span>❄️ A/C</span>
-                    </div>
-                    <div class="galeria-footer">
-                        <strong class="precio">$650.000/mes</strong>
-                        <button class="btn-ver" onclick="abrirModal('registro')">Solicitar</button>
-                    </div>
-                </div>
-            </div>
-            <div class="galeria-card" data-estado="ocupada">
-                <div class="galeria-img" style="background: linear-gradient(135deg, #BF113144, #034C8C22)">
-                    <span class="galeria-emoji">📚</span>
-                    <div class="galeria-badge ocupada">Ocupada</div>
-                </div>
-                <div class="galeria-info">
-                    <h3>Residencia Universitaria · Hab. 210</h3>
-                    <p>Habitación doble, muy solicitada por su ubicación estratégica y silencio.</p>
-                    <div class="galeria-tags">
-                        <span>🤫 Silenciosa</span><span>📍 Céntrica</span><span>🚌 Bus</span>
-                    </div>
-                    <div class="galeria-footer">
-                        <strong class="precio">$280.000/mes</strong>
-                        <button class="btn-ver ocupado" disabled>No disponible</button>
-                    </div>
-                </div>
-            </div>
+
         </div>
     </section>
 
@@ -385,7 +330,7 @@
                     <span class="canal-icon">📱</span>
                     <div>
                         <strong>WhatsApp</strong>
-                        <small>+57 310 000 0000</small>
+                        <small>+57 310 821 2090</small>
                     </div>
                 </div>
                 <div class="contacto-canal">
@@ -402,22 +347,32 @@
                         <small>Lun–Vie: 8am – 6pm</small>
                     </div>
                 </div>
+            </div>
 
-                <div class="faq-mini">
-                    <h4>Preguntas frecuentes</h4>
-                    <div class="faq-item" onclick="toggleFaq(this)">
-                        <div class="faq-q">¿Cuánto cuesta EduSpace? <span>+</span></div>
-                        <div class="faq-a">El plan básico es completamente gratis hasta 10 habitaciones. Los planes premium inician en $29.990/mes.</div>
+            <div class="contact-form-card">
+                <h3>Escríbenos</h3>
+                <form id="contactoForm" onsubmit="enviarContacto(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Nombre</label>
+                            <input type="text" id="cont-nombre" placeholder="Tu nombre" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Correo</label>
+                            <input type="email" id="cont-correo" placeholder="tu@correo.com" required>
+                        </div>
                     </div>
-                    <div class="faq-item" onclick="toggleFaq(this)">
-                        <div class="faq-q">¿Mis datos están seguros? <span>+</span></div>
-                        <div class="faq-a">Sí. Usamos cifrado y no compartimos información con terceros. Cumplimos con la ley 1581 de Colombia.</div>
+                    <div class="form-group">
+                        <label>Asunto</label>
+                        <input type="text" id="cont-asunto" placeholder="¿En qué podemos ayudarte?" required>
                     </div>
-                    <div class="faq-item" onclick="toggleFaq(this)">
-                        <div class="faq-q">¿Puedo probar antes de pagar? <span>+</span></div>
-                        <div class="faq-a">¡Claro! Tenemos 30 días de prueba gratuita en todos los planes. Sin tarjeta de crédito.</div>
+                    <div class="form-group">
+                        <label>Mensaje</label>
+                        <textarea id="cont-mensaje" rows="5" placeholder="Escribe tu mensaje..." required></textarea>
                     </div>
-                </div>
+                    <div id="cont-success" class="auth-msg success" style="display:none"></div>
+                    <button type="submit" class="btn-auth">Enviar mensaje</button>
+                </form>
             </div>
 
         </div>
@@ -438,19 +393,15 @@
             <h4>Navegación</h4>
             <a onclick="navegar('inicio')">Inicio</a>
             <a onclick="navegar('quienes-somos')">Quiénes Somos</a>
-            <a onclick="navegar('galeria')">Inmuebles</a>
+            <a onclick="navegar('inmuebles')">Inmuebles</a>
+            <a onclick="navegar('precios')">Precios</a>
             <a onclick="navegar('contacto')">Contacto</a>
         </div>
-        <div class="footer-links">
-            <h4>Producto</h4>
-            <a href="#">Precios</a>
-            <a href="#">Características</a>
-            
-        </div>
+        
         <div class="footer-contact">
             <h4>Contacto</h4>
             <p>📧 soporte@eduspace.co</p>
-            <p>📱 +57 310 000 0000</p>
+            <p>📱 +57 310 821 2090</p>
             <p>📍 Medellín, Colombia 🇨🇴</p>
         </div>
     </div>

@@ -239,13 +239,13 @@ function verificarSesion() {
 }
 
 // ===== GALERÍA · FILTROS =====
-function filtrarGaleria(estado, boton) {
+function filtrarInmuebles(estado, boton) {
     // Actualizar botones
     document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('active'));
     boton.classList.add('active');
 
     // Filtrar cards
-    document.querySelectorAll('.galeria-card').forEach(card => {
+    document.querySelectorAll('.inmuebles-card').forEach(card => {
         if (estado === 'todas' || card.dataset.estado === estado) {
             card.classList.remove('oculta');
             card.style.animation = 'fadeSlide 0.4s ease';
@@ -376,10 +376,29 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 0.1 });
 
 document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.feature-card, .stat-card, .team-card, .galeria-card').forEach(el => {
+    document.querySelectorAll('.feature-card, .stat-card, .team-card, .inmuebles-card').forEach(el => {
         el.style.opacity = '0';
         el.style.transform = 'translateY(20px)';
         el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
         observer.observe(el);
     });
 });
+
+// ===== CONTACTO · ENVIAR MENSAJE =====
+function enviarContacto(event) {
+    event.preventDefault();
+    const nombre = document.getElementById('cont-nombre').value.trim();
+    const correo = document.getElementById('cont-correo').value.trim();
+    const asunto = document.getElementById('cont-asunto').value.trim();
+    const mensaje = document.getElementById('cont-mensaje').value.trim();
+    const successEl = document.getElementById('cont-success');
+
+    successEl.textContent = `✅ ¡Gracias, ${nombre}! Tu mensaje fue enviado. Te contactaremos a ${correo} pronto.`;
+    successEl.style.display = 'block';
+
+    document.getElementById('contactoForm').reset();
+
+    setTimeout(() => {
+        successEl.style.display = 'none';
+    }, 5000);
+}
