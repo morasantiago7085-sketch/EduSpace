@@ -152,7 +152,7 @@ function handleLogin(event) {
         if (usuario.rol === 'inquilino') {
             window.location.href = 'dashboard_inquilino.html';
         } else {
-            window.location.href = 'dashboard.html';
+            window.location.href = 'dashboard_arrendador.html';
         }
     }, 1200);
 }
@@ -208,7 +208,7 @@ function handleRegistro(event) {
         if (nuevoUsuario.rol === 'inquilino') {
             window.location.href = 'dashboard_inquilino.html';
         } else {
-            window.location.href = 'dashboard.html';
+            window.location.href = 'dashboard_arrendador.html';
         }
     }, 1200);
 }
@@ -226,7 +226,7 @@ function verificarSesion() {
         // Usuario logueado: cambiar botón
         const btnLogin = document.querySelector('.btn-login');
         const btnReg = document.querySelector('.btn-registro');
-        const destino = sesion.rol === 'admin' ? 'dashboard.html' : 'dashboard_inquilino.html';
+        const destino = sesion.rol === 'arrendador' ? 'dashboard_arrendador.html' : 'dashboard_inquilino.html';
         if (btnLogin) {
             btnLogin.textContent = 'Mi Panel →';
             btnLogin.onclick = () => window.location.href = destino;

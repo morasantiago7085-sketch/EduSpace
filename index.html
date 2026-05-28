@@ -45,7 +45,8 @@
 
         <!-- HERO -->
         <div class="hero">
-            <div class="hero-bg"></div>
+            <!-- Fondo de video principal del hero -->
+            <video class="hero-bg-video" src="img/Banner.mp4" autoplay loop muted playsinline></video>
             <div class="hero-content">
                 <div class="hero-badge">🎓 Plataforma SaaS Educativa</div>
                 <h1 class="hero-titulo">Gestiona tu residencia<br><span class="highlight">sin complicaciones</span></h1>
@@ -55,65 +56,16 @@
                     <button class="btn-cta-secondary" onclick="navegar('quienes-somos')">Conocer más</button>
                 </div>
             </div>
-            <div class="hero-visual">
-                <div class="floating-card card-1">
-                    <span class="card-icon">🏠</span>
-                    <div>
-                        <strong>Casa Central</strong>
-                        <small>3 habitaciones libres</small>
-                    </div>
-                </div>
-                <div class="floating-card card-2">
-                    <span class="card-icon">💰</span>
-                    <div>
-                        <strong>Pago recibido</strong>
-                        <small>Juan Pérez · $450.000</small>
-                    </div>
-                </div>
-                <div class="floating-card card-3">
-                    <span class="card-icon">🔧</span>
-                    <div>
-                        <strong>Reporte nuevo</strong>
-                        <small>Hab. 4 · Grifo roto</small>
-                    </div>
-                </div>
-                <div class="hero-dashboard-mock">
-                    <div class="mock-header">
-                        <div class="mock-dot red"></div>
-                        <div class="mock-dot yellow"></div>
-                        <div class="mock-dot green"></div>
-                        <span>Panel EduSpace</span>
-                    </div>
-                    <div class="mock-body">
-                        <div class="mock-stat">
-                            <span class="mock-num" data-target="24">0</span>
-                            <span>Inquilinos</span>
-                        </div>
-                        <div class="mock-stat">
-                            <span class="mock-num" data-target="18">0</span>
-                            <span>Ocupadas</span>
-                        </div>
-                        <div class="mock-stat">
-                            <span class="mock-num" data-target="6">0</span>
-                            <span>Libres</span>
-                        </div>
-                    </div>
-                    <div class="mock-bar-container">
-                        <div class="mock-bar" style="width:0%" data-width="75%"></div>
-                    </div>
-                    <small>Ocupación: 75%</small>
-                </div>
-            </div>
         </div>
 
         <!-- STATS -->
         <div class="stats-section">
             <div class="stat-card">
-                <span class="stat-num counter" data-target="150">0</span>
+                <span class="stat-num counter" data-target="30">0</span>
                 <span class="stat-label">Residencias activas</span>
             </div>
             <div class="stat-card">
-                <span class="stat-num counter" data-target="1200">0</span>
+                <span class="stat-num counter" data-target="110">0</span>
                 <span class="stat-label">Inquilinos registrados</span>
             </div>
             <div class="stat-card">
@@ -121,7 +73,7 @@
                 <span class="stat-label">% Satisfacción</span>
             </div>
             <div class="stat-card">
-                <span class="stat-num counter" data-target="5">0</span>
+                <span class="stat-num counter" data-target="3">0</span>
                 <span class="stat-label">Ciudades en Colombia</span>
             </div>
         </div>
@@ -226,7 +178,7 @@
                     <div class="value-chip">🎯 Simplicidad</div>
                     <div class="value-chip">🔒 Seguridad</div>
                     <div class="value-chip">📊 Datos en tiempo real</div>
-                    <div class="value-chip">🇨🇴 Hecho en Colombia</div>
+                    <div class="value-chip">Hecho en Colombia</div>
                 </div>
             </div>
             <div class="about-img">
@@ -240,7 +192,7 @@
                     </div>
                     <div class="av-stat-row">
                         <div class="av-stat"><strong>2024</strong><small>Fundación</small></div>
-                        <div class="av-stat"><strong>3</strong><small>Desarrolladores</small></div>
+                        <div class="av-stat"><strong>4</strong><small>Desarrolladores</small></div>
                         <div class="av-stat"><strong>+150</strong><small>Usuarios</small></div>
                     </div>
                     <p class="av-quote">"Creemos que gestionar una residencia estudiantil debe ser tan fácil como enviar un mensaje."</p>
@@ -252,22 +204,28 @@
             <h3 class="section-title">Nuestro <span>Equipo</span></h3>
             <div class="team-grid">
                 <div class="team-card">
-                    <div class="team-avatar" style="background: var(--azul)">JD</div>
-                    <h4>Juan Díaz</h4>
+                    <div class="team-avatar" style="background: var(--azul)">SM</div>
+                    <h4>Santiago Mora</h4>
                     <span class="team-rol">Backend Developer</span>
                     <p>Arquitectura del sistema y base de datos. Apasionado por las APIs REST.</p>
                 </div>
                 <div class="team-card">
                     <div class="team-avatar" style="background: var(--rojo)">MR</div>
-                    <h4>María Rodríguez</h4>
+                    <h4>Matias Restrepo</h4>
                     <span class="team-rol">Frontend Developer</span>
                     <p>Diseño de interfaces y experiencia de usuario. CSS es su lenguaje favorito.</p>
                 </div>
                 <div class="team-card">
                     <div class="team-avatar" style="background: var(--amarillo)">CL</div>
-                    <h4>Carlos López</h4>
+                    <h4>Camilo López</h4>
                     <span class="team-rol">Full Stack Developer</span>
                     <p>Integración de sistemas y lógica de negocio. El puente entre frontend y backend.</p>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar" style="background: var(--azul)">JD</div>
+                    <h4>Juliana Zapata</h4>
+                    <span class="team-rol">Frontend Developer</span>
+                    <p>Diseño de interfaces y experiencia de usuario. CSS es su lenguaje favorito.</p>
                 </div>
             </div>
         </div>
@@ -480,15 +438,14 @@
             <h4>Navegación</h4>
             <a onclick="navegar('inicio')">Inicio</a>
             <a onclick="navegar('quienes-somos')">Quiénes Somos</a>
-            <a onclick="navegar('galeria')">Galería</a>
+            <a onclick="navegar('galeria')">Inmuebles</a>
             <a onclick="navegar('contacto')">Contacto</a>
         </div>
         <div class="footer-links">
             <h4>Producto</h4>
             <a href="#">Precios</a>
             <a href="#">Características</a>
-            <a href="#">API</a>
-            <a href="#">Soporte</a>
+            
         </div>
         <div class="footer-contact">
             <h4>Contacto</h4>
@@ -498,7 +455,7 @@
         </div>
     </div>
     <div class="footer-bottom">
-        <p>© 2024 EduSpace · Hecho con ❤️ en Medellín · Proyecto académico de Backend</p>
+        <p>© 2024 EduSpace · Hecho con ❤️ en Medellín · </p>
     </div>
 </footer>
 

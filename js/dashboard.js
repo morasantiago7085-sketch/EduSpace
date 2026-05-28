@@ -1,8 +1,11 @@
 
 let inquilinos = JSON.parse(localStorage.getItem('eduspace_inquilinos') || '[]');
-let habitaciones = JSON.parse(localStorage.getItem('eduspace_habitaciones') || '[]');
 let pagos = JSON.parse(localStorage.getItem('eduspace_pagos') || '[]');
 let reportes = JSON.parse(localStorage.getItem('eduspace_reportes') || '[]');
+
+// Eliminar habitaciones demo (IDs 1-5). Solo conservar las que agregó el arrendador (Date.now() = ID grande)
+let habitaciones = JSON.parse(localStorage.getItem('eduspace_habitaciones') || '[]').filter(h => h.id > 100);
+localStorage.setItem('eduspace_habitaciones', JSON.stringify(habitaciones));
 
 let editandoId = null;
 
@@ -18,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Mostrar info usuario
     document.getElementById('welcomeName').textContent = sesion.nombre.split(' ')[0];
     document.getElementById('suNombre').textContent = sesion.nombre;
-    document.getElementById('suRol').textContent = sesion.rol === 'admin' ? '⚙️ Administrador' : '🏠 Inquilino';
+    document.getElementById('suRol').textContent = (sesion.rol === 'admin' || sesion.rol === 'arrendador') ? '🏘️ Arrendador' : '🏠 Inquilino';
     document.getElementById('suAvatar').textContent = sesion.nombre.charAt(0).toUpperCase();
 
     // Fecha
@@ -27,8 +30,10 @@ document.addEventListener('DOMContentLoaded', () => {
         weekday: 'short', day: 'numeric', month: 'short'
     });
 
-    // Si no hay datos demo, cargar algunos de ejemplo
+    // Si no hay datos de ejemplo, cargar algunos (habitaciones NO se tocan, las gestiona el arrendador)
     if (inquilinos.length === 0) cargarDatosDemo();
+    // Siempre leer habitaciones del localStorage DESPUÉS del demo, para no perder las guardadas
+    habitaciones = JSON.parse(localStorage.getItem('eduspace_habitaciones') || '[]');
 
     // Renderizar todo
     actualizarKPIs();
@@ -53,13 +58,7 @@ function cargarDatosDemo() {
         { id: 2, nombre: 'Carlos Pérez', email: 'carlos@email.com', tel: '+57 315 987 6543', habitacion: 'Hab. 203', pago: 'mora' },
         { id: 3, nombre: 'Laura Martínez', email: 'laura@email.com', tel: '+57 318 456 7890', habitacion: 'Hab. 305', pago: 'al_dia' },
     ];
-    habitaciones = [
-        { id: 1, numero: 'Hab. 101', casa: 'Casa Central', precio: 450000, estado: 'ocupada' },
-        { id: 2, numero: 'Hab. 102', casa: 'Casa Central', precio: 450000, estado: 'mantenimiento' },
-        { id: 3, numero: 'Hab. 203', casa: 'Coliving Norte', precio: 320000, estado: 'ocupada' },
-        { id: 4, numero: 'Hab. 305', casa: 'Residencia Univ.', precio: 580000, estado: 'ocupada' },
-        { id: 5, numero: 'Hab. 401', casa: 'Coliving Sur', precio: 650000, estado: 'disponible' },
-    ];
+    habitaciones = [];
     pagos = [
         { id: 1, fecha: '01/03/2026', inquilino: 'María García', habitacion: 'Hab. 101', monto: 450000, mes: '2026-03', estado: 'pagado' },
         { id: 2, fecha: '28/02/2026', inquilino: 'Laura Martínez', habitacion: 'Hab. 305', monto: 580000, mes: '2026-02', estado: 'pagado' },
@@ -76,7 +75,7 @@ function cargarDatosDemo() {
 
 function guardarTodo() {
     localStorage.setItem('eduspace_inquilinos', JSON.stringify(inquilinos));
-    localStorage.setItem('eduspace_habitaciones', JSON.stringify(habitaciones));
+    // habitaciones NO se toca aquí: cada función la guarda directamente
     localStorage.setItem('eduspace_pagos', JSON.stringify(pagos));
     localStorage.setItem('eduspace_reportes', JSON.stringify(reportes));
 }

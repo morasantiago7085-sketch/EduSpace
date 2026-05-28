@@ -187,19 +187,20 @@ main { padding-top: 75px; }
     align-items: center;
     position: relative;
     overflow: hidden;
-    background: linear-gradient(135deg, #011c35 0%, #034C8C 50%, #0a5fa8 100%);
     padding: 60px 30px;
     gap: 40px;
     max-width: 100%;
 }
 
-.hero-bg {
+.hero-bg-video {
     position: absolute;
     inset: 0;
-    background-image: 
-        radial-gradient(circle at 20% 50%, rgba(242,171,39,0.12) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(191,17,32,0.1) 0%, transparent 40%),
-        radial-gradient(circle at 60% 80%, rgba(255,255,255,0.05) 0%, transparent 30%);
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+    pointer-events: none;
+    background: #011c35;
 }
 
 .hero-content {
@@ -229,22 +230,23 @@ main { padding-top: 75px; }
 .hero-titulo {
     font-size: clamp(2.2rem, 5vw, 3.8rem);
     font-weight: 800;
-    color: #fff;
+    color:#F2AB27;
     line-height: 1.1;
     margin-bottom: 20px;
     animation: fadeSlide 0.7s ease;
 }
 .hero-titulo .highlight {
-    color: var(--amarillo);
+    color: var(--azul);
     position: relative;
 }
 
 .hero-descripcion {
     font-size: 1.1rem;
-    color: rgba(255,255,255,0.8);
+    color: #a50e1b;
     line-height: 1.7;
     margin-bottom: 35px;
     animation: fadeSlide 0.8s ease;
+    font-weight: bold;
 }
 
 .hero-btns {
@@ -626,6 +628,7 @@ small { font-size: 0.8rem; opacity: 0.7; }
 /* ===== CONTACTO ===== */
 .contacto-layout {
     display: flex;
+    justify-content: center;
     gap: 50px;
     max-width: 1100px;
     margin: 0 auto;
@@ -633,7 +636,7 @@ small { font-size: 0.8rem; opacity: 0.7; }
     flex-wrap: wrap;
 }
 
-.contacto-info { flex: 1; min-width: 280px; }
+.contacto-info { flex: 1; min-width: 280px; max-width: 620px; }
 .contacto-info h3 { font-size: 1.3rem; color: var(--azul); margin-bottom: 25px; font-weight: 700; }
 .contacto-canal {
     display: flex;
