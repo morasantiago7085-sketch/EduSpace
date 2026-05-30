@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduSpace | Gestión de Residencias Estudiantiles</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+
+<header id="header">
+    <nav>
+        <div class="logo" onclick="navegar('inicio')">
+            <img src="img/logo.png" alt="EduSpace Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+            <div class="logo-fallback">
+                <span class="logo-edu">Edu</span><span class="logo-space">Space</span>
+            </div>
+        </div>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a onclick="navegar('inicio')" data-page="inicio" class="nav-link active">Inicio</a></li>
+            <li><a onclick="navegar('quienes-somos')" data-page="quienes-somos" class="nav-link">Quiénes Somos</a></li>
+            <li><a onclick="navegar('inmuebles')" data-page="inmuebles" class="nav-link">Inmuebles</a></li>
+            <li><a onclick="navegar('precios')" data-page="precios" class="nav-link">Precios</a></li>
+            <li><a onclick="navegar('contacto')" data-page="contacto" class="nav-link">Contacto</a></li>
+        </ul>
+
+        <div class="nav-actions">
+            <button class="btn-registro" onclick="abrirModal('registro')">Registrarse</button>
+            <button class="btn-login" onclick="abrirModal('login')">Iniciar Sesión</button>
+        </div>
+
+        <button type="button" class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Abrir menú de navegación">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+</header>
+
+<main>
+
+    <section id="inicio" class="seccion activa">
+
+        <div class="hero">
+            <video class="hero-bg-video" src="img/Banner.mp4" autoplay loop muted playsinline></video>
+            <div class="hero-content">
+                <div class="hero-badge">🎓 Plataforma SaaS Educativa</div>
+                <h1 class="hero-titulo">Gestiona tu residencia<br><span class="highlight">sin complicaciones</span></h1>
+                <p class="hero-descripcion">EduSpace centraliza inquilinos, pagos, habitaciones y reportes de mantenimiento en un solo panel inteligente.</p>
+                <div class="hero-btns">
+                    <button class="btn-cta-primary" onclick="abrirModal('registro')">Comenzar Gratis →</button>
+                    <button class="btn-cta-secondary" onclick="navegar('quienes-somos')">Conocer más</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-section">
+            <div class="stat-card">
+                <span class="stat-num counter" data-target="30">0</span>
+                <span class="stat-label">Residencias activas</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-num counter" data-target="110">0</span>
+                <span class="stat-label">Inquilinos registrados</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-num counter" data-target="98">0</span>
+                <span class="stat-label">% Satisfacción</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-num counter" data-target="4">0</span>
+                <span class="stat-label">Ciudades en Colombia</span>
+            </div>
+        </div>
+
+        <div class="features-section">
+            <h2 class="section-title">Todo lo que necesitas en <span>un solo lugar</span></h2>
+            <div class="features-grid">
+                <div class="feature-card" onclick="this.classList.toggle('flipped')">
+                    <div class="feature-front">
+                        <div class="feature-icon">👥</div>
+                        <h3>Gestión de Inquilinos</h3>
+                        <p>Registra, edita y consulta la información de cada inquilino al instante.</p>
+                        <small>Clic para ver más →</small>
+                    </div>
+                    <div class="feature-back">
+                        <h3>¿Qué incluye?</h3>
+                        <ul>
+                            <li>✅ Ficha completa del inquilino</li>
+                            <li>✅ Historial de pagos</li>
+                            <li>✅ Documentos adjuntos</li>
+                            <li>✅ Fechas de contrato</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="feature-card" onclick="this.classList.toggle('flipped')">
+                    <div class="feature-front">
+                        <div class="feature-icon">🏘️</div>
+                        <h3>Control de Habitaciones</h3>
+                        <p>Visualiza el estado de cada cuarto: ocupado, disponible o en mantenimiento.</p>
+                        <small>Clic para ver más →</small>
+                    </div>
+                    <div class="feature-back">
+                        <h3>¿Qué incluye?</h3>
+                        <ul>
+                            <li>✅ Mapa visual de habitaciones</li>
+                            <li>✅ Historial de ocupantes</li>
+                            <li>✅ Fotos del cuarto</li>
+                            <li>✅ Estado en tiempo real</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="feature-card" onclick="this.classList.toggle('flipped')">
+                    <div class="feature-front">
+                        <div class="feature-icon">💳</div>
+                        <h3>Gestión de Pagos</h3>
+                        <p>Registra rentas, detecta mora y genera recordatorios automáticos.</p>
+                        <small>Clic para ver más →</small>
+                    </div>
+                    <div class="feature-back">
+                        <h3>¿Qué incluye?</h3>
+                        <ul>
+                            <li>✅ Registro de pagos</li>
+                            <li>✅ Alertas de mora</li>
+                            <li>✅ Comprobantes digitales</li>
+                            <li>✅ Resumen mensual</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="feature-card" onclick="this.classList.toggle('flipped')">
+                    <div class="feature-front">
+                        <div class="feature-icon">🔧</div>
+                        <h3>Reportes de Daños</h3>
+                        <p>Centraliza las solicitudes de mantenimiento con seguimiento de estado.</p>
+                        <small>Clic para ver más →</small>
+                    </div>
+                    <div class="feature-back">
+                        <h3>¿Qué incluye?</h3>
+                        <ul>
+                            <li>✅ Formulario de reporte</li>
+                            <li>✅ Prioridad urgente/normal</li>
+                            <li>✅ Estado del reporte</li>
+                            <li>✅ Notificación al admin</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+     
+    </section>
+
+    <section id="quienes-somos" class="seccion">
+        <div class="page-header">
+            <h2>Quiénes <span>Somos</span></h2>
+            <p>La historia detrás de EduSpace</p>
+        </div>
+
+        <div class="about-story">
+            <div class="about-text">
+                <h3>Nacimos de un problema real</h3>
+                <p>EduSpace surgió cuando identificamos el caos que enfrentan los administradores de residencias estudiantiles: información dispersa en chats de WhatsApp, pagos sin registro formal y reportes de daños que se perdían entre mensajes.</p>
+                <p>Como estudiantes de tecnología, decidimos crear la solución que todo administrador necesita: una plataforma web centralizada, simple e inteligente.</p>
+                <div class="about-values">
+                    <div class="value-chip">🎯 Simplicidad</div>
+                    <div class="value-chip">🔒 Seguridad</div>
+                    <div class="value-chip">📊 Datos en tiempo real</div>
+                    <div class="value-chip">Hecho en Colombia</div>
+                </div>
+            </div>
+            <div class="about-img">
+                <div class="about-card-visual">
+                    <div class="av-header">
+                        <div class="av-avatar">ES</div>
+                        <div>
+                            <strong>EduSpace Team</strong>
+                            <small>Medellín, Colombia</small>
+                        </div>
+                    </div>
+                    <div class="av-stat-row">
+                        <div class="av-stat"><strong>2024</strong><small>Fundación</small></div>
+                        <div class="av-stat"><strong>4</strong><small>Desarrolladores</small></div>
+                        <div class="av-stat"><strong>+150</strong><small>Usuarios</small></div>
+                    </div>
+                    <p class="av-quote">"Creemos que gestionar una residencia estudiantil debe ser tan fácil como enviar un mensaje."</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="team-section">
+            <h3 class="section-title">Nuestro <span>Equipo</span></h3>
+            <div class="team-grid">
+                <div class="team-card">
+                    <div class="team-avatar" style="background: var(--azul)">SM</div>
+                    <h4>Santiago Mora</h4>
+                    <span class="team-rol">Backend Developer</span>
+                    <p>Arquitectura del sistema y base de datos. Apasionado por las APIs REST.</p>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar" style="background: var(--rojo)">MR</div>
+                    <h4>Matias Restrepo</h4>
+                    <span class="team-rol">Frontend Developer</span>
+                    <p>Diseño de interfaces y experiencia de usuario. CSS es su lenguaje favorito.</p>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar" style="background: var(--amarillo)">CL</div>
+                    <h4>Camilo López</h4>
+                    <span class="team-rol">Full Stack Developer</span>
+                    <p>Integración de sistemas y lógica de negocio. El puente entre frontend y backend.</p>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar" style="background: var(--azul)">JD</div>
+                    <h4>Juliana Zapata</h4>
+                    <span class="team-rol">Frontend Developer</span>
+                    <p>Diseño de interfaces y experiencia de usuario. CSS es su lenguaje favorito.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mision-vision">
+            <div class="mv-card mision">
+                <div class="mv-icon">🎯</div>
+                <h3>Misión</h3>
+                <p>Digitalizar la gestión de residencias estudiantiles colombianas, reduciendo el tiempo administrativo en un 70% y eliminando la pérdida de información.</p>
+            </div>
+            <div class="mv-card vision">
+                <div class="mv-icon">🔭</div>
+                <h3>Visión</h3>
+                <p>Ser la plataforma líder de gestión de alojamientos estudiantiles en Latinoamérica para el 2027, conectando más de 10.000 residencias.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="inmuebles" class="seccion">
+        <div class="page-header">
+            <h2>Tu futuro <span>Espacio</span></h2>
+            <p>Conoce las residencias que gestionamos en EduSpace</p>
+        </div>
+
+
+
+        <div class="inmuebles-grid" id="inmueblesGrid">
+        </div>
+    </section>
+
+    <section id="precios" class="seccion">
+        <div class="page-header">
+            <h2>Planes y <span>Precios</span></h2>
+            <p>Elige el plan que se adapta a tu rol en EduSpace</p>
+        </div>
+        <div class="precios-grid">
+
+            <div class="precio-card precio-card-destacado">
+                <div class="precio-icono">🎓</div>
+                <h3 class="precio-nombre">Estudiante</h3>
+                <p class="precio-subtitulo">Arrendatario / Inquilino</p>
+                <div class="precio-monto">
+                    <span class="precio-simbolo">$</span>
+                    <span class="precio-valor">7.900</span>
+                    <span class="precio-periodo">COP / mes</span>
+                </div>
+                <p class="precio-slogan">Encuentra tu espacio ideal sin costo</p>
+                <ul class="precio-features">
+                    <li>✅ Buscar y explorar habitaciones</li>
+                    <li>✅ Ver disponibilidad en tiempo real</li>
+                    <li>✅ Contactar arrendadores</li>
+                    <li>✅ Seguimiento de tus pagos</li>
+                    <li>✅ Reportar daños o novedades</li>
+                </ul>
+            </div>
+
+            <div class="precio-card precio-card-destacado">
+                <div class="precio-icono">🏘️</div>
+                <h3 class="precio-nombre">Arrendador</h3>
+                <p class="precio-subtitulo">Dueño del Inmueble</p>
+                <div class="precio-monto">
+                    <span class="precio-simbolo">$</span>
+                    <span class="precio-valor">39.900</span>
+                    <span class="precio-periodo">COP / mes</span>
+                </div>
+                <p class="precio-slogan">Gestiona tus inmuebles sin complicaciones</p>
+                <ul class="precio-features">
+                    <li>✅ Publicar habitaciones ilimitadas</li>
+                    <li>✅ Panel de control completo</li>
+                    <li>✅ Gestión de inquilinos</li>
+                    <li>✅ Registro y control de pagos</li>
+                    <li>✅ Reportes de mantenimiento</li>
+                    <li>✅ Estadísticas de ocupación</li>
+                </ul>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="contacto" class="seccion">
+        <div class="page-header">
+            <h2>Contacto y <span>Soporte</span></h2>
+            <p>¿Tienes un daño o necesitas ayuda? Estamos aquí</p>
+        </div>
+
+        <div class="contacto-layout">
+            <div class="contacto-info">
+                <h3>Canales de atención</h3>
+                <div class="contacto-canal">
+                    <span class="canal-icon">📧</span>
+                    <div>
+                        <strong>Correo</strong>
+                        <small>soporte@eduspace.co</small>
+                    </div>
+                </div>
+                <div class="contacto-canal">
+                    <span class="canal-icon">📱</span>
+                    <div>
+                        <strong>WhatsApp</strong>
+                        <small>+57 310 821 2090</small>
+                    </div>
+                </div>
+                <div class="contacto-canal">
+                    <span class="canal-icon">📍</span>
+                    <div>
+                        <strong>Oficina</strong>
+                        <small>Medellín, Antioquia</small>
+                    </div>
+                </div>
+                <div class="contacto-canal">
+                    <span class="canal-icon">⏰</span>
+                    <div>
+                        <strong>Horario</strong>
+                        <small>Lun–Vie: 8am – 6pm</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-form-card">
+                <h3>Escríbenos</h3>
+                <form id="contactoForm" onsubmit="enviarContacto(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Nombre</label>
+                            <input type="text" id="cont-nombre" placeholder="Tu nombre" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Correo</label>
+                            <input type="email" id="cont-correo" placeholder="tu@correo.com" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Asunto</label>
+                        <input type="text" id="cont-asunto" placeholder="¿En qué podemos ayudarte?" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Mensaje</label>
+                        <textarea id="cont-mensaje" rows="5" placeholder="Escribe tu mensaje..." required></textarea>
+                    </div>
+                    <div id="cont-success" class="auth-msg success" style="display:none"></div>
+                    <button type="submit" class="btn-auth">Enviar mensaje</button>
+                </form>
+            </div>
+
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    <div class="footer-content">
+        <div class="footer-brand">
+            <div class="logo-fallback footer-logo">
+                <span class="logo-edu">Edu</span><span class="logo-space">Space</span>
+            </div>
+            <p>La plataforma SaaS para gestión integral de residencias estudiantiles y colivings en Colombia.</p>
+        </div>
+        <div class="footer-links">
+            <h4>Navegación</h4>
+            <a onclick="navegar('inicio')">Inicio</a>
+            <a onclick="navegar('quienes-somos')">Quiénes Somos</a>
+            <a onclick="navegar('inmuebles')">Inmuebles</a>
+            <a onclick="navegar('precios')">Precios</a>
+            <a onclick="navegar('contacto')">Contacto</a>
+        </div>
+        
+        <div class="footer-contact">
+            <h4>Contacto</h4>
+            <p>📧 soporte@eduspace.co</p>
+            <p>📱 +57 310 821 2090</p>
+            <p>📍 Medellín, Colombia 🇨🇴</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2024 EduSpace · Hecho con ❤️ en Medellín · </p>
+    </div>
+</footer>
+
+<div class="modal-overlay" id="authModal" onclick="cerrarModalFuera(event)">
+    <div class="modal-content">
+        <button class="cerrar-modal" onclick="cerrarModal()">✕</button>
+
+        <div class="modal-logo">
+            <span class="logo-edu">Edu</span><span class="logo-space">Space</span>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="cambiarTab('login')" id="tab-login">Iniciar Sesión</button>
+            <button class="tab" onclick="cambiarTab('registro')" id="tab-registro">Registrarse</button>
+        </div>
+
+        
+        <form id="form-login" class="auth-form activa" onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label>Correo electrónico</label>
+                <input type="email" id="login-email" placeholder="tu@correo.com" required>
+            </div>
+            <div class="form-group">
+                <label>Contraseña</label>
+                <div class="pass-wrapper">
+                    <input type="password" id="login-pass" placeholder="••••••••" required>
+                    <span class="toggle-pass" onclick="togglePass('login-pass')">👁️</span>
+                </div>
+            </div>
+            <div id="login-error" class="auth-msg error" style="display:none"></div>
+            <div id="login-success" class="auth-msg success" style="display:none"></div>
+            <button type="submit" class="btn-auth">Entrar al Panel →</button>
+            <p class="auth-alt">¿No tienes cuenta? <a onclick="cambiarTab('registro')">Regístrate aquí</a></p>
+        </form>
+
+        
+        <form id="form-registro" class="auth-form" onsubmit="handleRegistro(event)">
+            <div class="form-group">
+                <label>Nombre completo</label>
+                <input type="text" id="reg-nombre" placeholder="Tu nombre" required aria-label="Nombre completo del reportante">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="reg-rol">Rol</label>
+                    <select id="reg-rol" aria-label="Selecciona tu rol de usuario" required>
+                        <option value="estudiante">🎓 Estudiante / Inquilino</option>
+                        <option value="arrendatario">🏘️ Arrendatario / Dueño</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="reg-tel">Teléfono</label>
+                    <input type="tel" id="reg-tel" placeholder="+57 300...">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Correo electrónico</label>
+                <input type="email" id="reg-email" placeholder="tu@correo.com" required aria-label="Correo electrónico del usuario">
+            </div>
+            <div class="form-group">
+                <label>Contraseña</label>
+                <div class="pass-wrapper">
+                    <input type="password" id="reg-pass" placeholder="Mínimo 6 caracteres" minlength="6" required>
+                    <span class="toggle-pass" onclick="togglePass('reg-pass')">👁️</span>
+                </div>
+                <div class="pass-strength" id="passStrength"></div>
+            </div>
+            <div id="reg-error" class="auth-msg error" style="display:none"></div>
+            <div id="reg-success" class="auth-msg success" style="display:none"></div>
+            <button type="submit" class="btn-auth">Crear cuenta →</button>
+            <p class="auth-alt">¿Ya tienes cuenta? <a onclick="cambiarTab('login')">Inicia sesión</a></p>
+        </form>
+
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="js/index.js"></script>
+</body>
+</html>

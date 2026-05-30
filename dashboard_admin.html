@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduSpace | Panel Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --rojo: #BF1120;
+            --azul: #034C8C;
+            --azul-claro: #0a5fa8;
+            --amarillo: #F2AB27;
+            --gris: #F2F2F2;
+            --gris-med: #e0e0e0;
+            --blanco: #FFFFFF;
+            --texto: #1a1a2e;
+            --texto-suave: #666;
+            --sidebar-w: 240px;
+            --sombra: 0 2px 12px rgba(0,0,0,0.07);
+            --radio: 12px;
+            --verde: #28a745;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--gris);
+            color: var(--texto);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        
+        .sidebar {
+            width: var(--sidebar-w);
+            background: linear-gradient(180deg, #011c35, #034C8C);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0; left: 0; bottom: 0;
+            z-index: 100;
+            transition: transform 0.3s;
+        }
+
+        .sidebar-brand {
+            padding: 28px 22px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .brand-logo { font-size: 1.5rem; font-weight: 800; }
+        .logo-edu { color: #fff; }
+        .logo-space { color: var(--amarillo); }
+        .brand-badge {
+            display: inline-block;
+            margin-top: 6px;
+            background: var(--amarillo);
+            color: #011c35;
+            font-size: 0.68rem;
+            font-weight: 800;
+            padding: 2px 9px;
+            border-radius: 50px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .sidebar-nav { flex: 1; padding: 20px 12px; display: flex; flex-direction: column; gap: 3px; }
+        .nav-section-label {
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: rgba(255,255,255,0.35);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 12px 16px 6px;
+        }
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 11px 16px;
+            border-radius: var(--radio);
+            color: rgba(255,255,255,0.65);
+            cursor: pointer;
+            font-size: 0.88rem;
+            font-weight: 600;
+            transition: all 0.25s;
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: left;
+            font-family: 'Poppins', sans-serif;
+        }
+        .sidebar-link:hover { background: rgba(255,255,255,0.08); color: #fff; }
+        .sidebar-link.active { background: rgba(255,255,255,0.15); color: #fff; border-left: 3px solid var(--amarillo); }
+        .si { font-size: 1.05rem; width: 20px; text-align: center; }
+
+        .sidebar-bottom {
+            padding: 16px 12px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .sidebar-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            border-radius: var(--radio);
+            margin-bottom: 8px;
+        }
+        .user-avatar {
+            width: 36px; height: 36px;
+            background: var(--amarillo);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.85rem;
+            color: #011c35;
+            flex-shrink: 0;
+        }
+        .user-info strong { display: block; font-size: 0.82rem; color: #fff; }
+        .user-info small { font-size: 0.72rem; color: rgba(255,255,255,0.5); }
+        .btn-logout {
+            display: flex; align-items: center; gap: 8px;
+            width: 100%; padding: 9px 14px;
+            background: rgba(191,17,32,0.15);
+            color: #ff6b7a;
+            border: none; border-radius: var(--radio);
+            cursor: pointer; font-size: 0.85rem; font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.25s;
+        }
+        .btn-logout:hover { background: rgba(191,17,32,0.35); color: #fff; }
+
+        
+        .main-content {
+            margin-left: var(--sidebar-w);
+            width: calc(100% - var(--sidebar-w));
+            min-height: 100vh;
+        }
+
+        .top-bar {
+            background: #fff;
+            padding: 16px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        .top-bar h1 { font-size: 1.2rem; font-weight: 700; color: var(--texto); }
+        .top-bar-right { display: flex; align-items: center; gap: 14px; }
+        .top-date { font-size: 0.82rem; color: var(--texto-suave); }
+        .btn-hamburger-dash {
+            display: none;
+            background: none; border: none;
+            font-size: 1.3rem; cursor: pointer;
+        }
+
+        .panel { padding: 28px 32px; }
+
+        
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 28px;
+        }
+        .kpi-card {
+            background: #fff;
+            border-radius: var(--radio);
+            padding: 22px 24px;
+            box-shadow: var(--sombra);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: transform 0.25s;
+        }
+        .kpi-card:hover { transform: translateY(-3px); }
+        .kpi-icon {
+            width: 52px; height: 52px;
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        .kpi-icon.azul { background: rgba(3,76,140,0.1); }
+        .kpi-icon.rojo { background: rgba(191,17,32,0.1); }
+        .kpi-icon.verde { background: rgba(40,167,69,0.1); }
+        .kpi-icon.amarillo { background: rgba(242,171,39,0.12); }
+        .kpi-num { font-size: 2rem; font-weight: 800; color: var(--azul); line-height: 1; }
+        .kpi-label { font-size: 0.78rem; color: var(--texto-suave); margin-top: 2px; font-weight: 600; }
+
+        
+        .page-section { display: none; }
+        .page-section.activa { display: block; }
+
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .section-header h2 { font-size: 1.1rem; font-weight: 700; color: var(--texto); }
+        .section-header-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+
+        .search-input {
+            padding: 9px 16px;
+            border: 2px solid var(--gris-med);
+            border-radius: 50px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.85rem;
+            outline: none;
+            transition: border-color 0.25s;
+            width: 230px;
+        }
+        .search-input:focus { border-color: var(--azul); }
+
+        .filter-select {
+            padding: 9px 14px;
+            border: 2px solid var(--gris-med);
+            border-radius: 50px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.85rem;
+            outline: none;
+            background: #fff;
+            cursor: pointer;
+            transition: border-color 0.25s;
+        }
+        .filter-select:focus { border-color: var(--azul); }
+
+        .btn-add {
+            padding: 10px 20px;
+            background: var(--azul);
+            color: #fff;
+            border: none;
+            border-radius: var(--radio);
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s;
+            display: flex; align-items: center; gap: 6px;
+            white-space: nowrap;
+        }
+        .btn-add:hover { background: var(--azul-claro); transform: translateY(-2px); }
+
+        
+        .table-wrapper {
+            overflow-x: auto;
+            background: #fff;
+            border-radius: var(--radio);
+            box-shadow: var(--sombra);
+        }
+        .data-table { width: 100%; border-collapse: collapse; min-width: 600px; }
+        .data-table th {
+            background: var(--azul);
+            color: #fff;
+            padding: 13px 18px;
+            text-align: left;
+            font-size: 0.82rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .data-table th:first-child { border-radius: var(--radio) 0 0 0; }
+        .data-table th:last-child { border-radius: 0 var(--radio) 0 0; }
+        .data-table td {
+            padding: 12px 18px;
+            border-bottom: 1px solid var(--gris);
+            font-size: 0.85rem;
+            vertical-align: middle;
+        }
+        .data-table tr:last-child td { border-bottom: none; }
+        .data-table tr:hover td { background: rgba(3,76,140,0.025); }
+        .empty-row td { text-align: center; color: var(--texto-suave); font-style: italic; padding: 40px !important; }
+
+        
+        .badge {
+            padding: 3px 10px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: inline-block;
+            white-space: nowrap;
+        }
+        .badge-admin { background: rgba(3,76,140,0.12); color: var(--azul); }
+        .badge-arrendatario { background: rgba(242,171,39,0.2); color: #a07010; }
+        .badge-estudiante { background: rgba(40,167,69,0.12); color: #155724; }
+        .badge-tecnico { background: rgba(191,17,32,0.1); color: var(--rojo); }
+
+        
+        .btn-edit, .btn-del {
+            padding: 5px 11px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Poppins', sans-serif;
+            margin-right: 4px;
+        }
+        .btn-edit { background: rgba(3,76,140,0.1); color: var(--azul); }
+        .btn-edit:hover { background: var(--azul); color: #fff; }
+        .btn-del { background: rgba(191,17,32,0.1); color: var(--rojo); }
+        .btn-del:hover { background: var(--rojo); color: #fff; }
+
+        
+        .user-cell {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .table-avatar {
+            width: 34px; height: 34px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 800;
+            font-size: 0.78rem;
+            color: #fff;
+            flex-shrink: 0;
+        }
+        .ta-admin { background: var(--azul); }
+        .ta-arrendatario { background: var(--amarillo); color: #011c35; }
+        .ta-estudiante { background: var(--verde); }
+        .ta-tecnico { background: var(--rojo); }
+
+        
+        .overview-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .ov-card {
+            background: #fff;
+            border-radius: var(--radio);
+            padding: 24px;
+            box-shadow: var(--sombra);
+        }
+        .ov-card h3 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--azul);
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--gris);
+        }
+        .rol-stat-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--gris);
+            font-size: 0.88rem;
+        }
+        .rol-stat-row:last-child { border-bottom: none; }
+        .rol-stat-row .rol-name { display: flex; align-items: center; gap: 8px; }
+        .rol-dot { width: 10px; height: 10px; border-radius: 50%; }
+        .rol-count { font-weight: 800; font-size: 1.1rem; color: var(--azul); }
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--gris);
+            font-size: 0.84rem;
+        }
+        .activity-item:last-child { border-bottom: none; }
+        .act-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .act-dot.green { background: var(--verde); }
+        .act-dot.blue { background: var(--azul); }
+        .act-dot.red { background: var(--rojo); }
+        .activity-item strong { color: var(--texto); }
+        .activity-item span { color: var(--texto-suave); font-size: 0.8rem; }
+
+        
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            z-index: 999;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .modal-overlay.abierto { display: flex; }
+        .modal-box {
+            background: #fff;
+            border-radius: var(--radio);
+            padding: 30px;
+            width: 100%;
+            max-width: 480px;
+            position: relative;
+            border-top: 4px solid var(--azul);
+            animation: modalIn 0.3s ease;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.92) translateY(-10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .modal-box h3 {
+            color: var(--azul);
+            font-size: 1.15rem;
+            margin-bottom: 22px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .cerrar-modal {
+            position: absolute;
+            top: 14px; right: 14px;
+            background: var(--gris);
+            border: none;
+            width: 30px; height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-family: 'Poppins', sans-serif;
+            transition: background 0.2s;
+        }
+        .cerrar-modal:hover { background: var(--gris-med); }
+
+        .form-group { margin-bottom: 16px; }
+        .form-group label {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: var(--texto);
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px 13px;
+            border: 2px solid var(--gris-med);
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.88rem;
+            outline: none;
+            transition: border-color 0.2s;
+            background: #fff;
+        }
+        .form-group input:focus, .form-group select:focus { border-color: var(--azul); }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .form-hint { font-size: 0.75rem; color: var(--texto-suave); margin-top: 4px; }
+
+        .btn-submit {
+            width: 100%;
+            padding: 12px;
+            background: var(--azul);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s;
+            margin-top: 6px;
+        }
+        .btn-submit:hover { background: var(--azul-claro); }
+
+        .modal-error {
+            background: rgba(191,17,32,0.08);
+            color: var(--rojo);
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 0.84rem;
+            font-weight: 600;
+            margin-bottom: 14px;
+            display: none;
+        }
+
+        
+        .confirm-box {
+            background: #fff;
+            border-radius: var(--radio);
+            padding: 30px;
+            width: 100%;
+            max-width: 380px;
+            text-align: center;
+            border-top: 4px solid var(--rojo);
+            animation: modalIn 0.3s ease;
+        }
+        .confirm-box .confirm-icon { font-size: 2.5rem; margin-bottom: 12px; }
+        .confirm-box h3 { font-size: 1.1rem; color: var(--texto); margin-bottom: 8px; }
+        .confirm-box p { font-size: 0.88rem; color: var(--texto-suave); margin-bottom: 22px; }
+        .confirm-btns { display: flex; gap: 12px; justify-content: center; }
+        .btn-cancel {
+            padding: 10px 22px;
+            background: var(--gris);
+            color: var(--texto);
+            border: none;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-cancel:hover { background: var(--gris-med); }
+        .btn-confirm-del {
+            padding: 10px 22px;
+            background: var(--rojo);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-confirm-del:hover { background: #9a0d1a; }
+
+        
+        .toast {
+            position: fixed;
+            bottom: 25px; right: 25px;
+            background: #011c35;
+            color: #fff;
+            padding: 12px 22px;
+            border-radius: 10px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            z-index: 9999;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            max-width: 320px;
+        }
+        .toast.show { transform: translateY(0); opacity: 1; }
+
+        
+        @media (max-width: 900px) {
+            .kpi-grid { grid-template-columns: 1fr 1fr; }
+            .overview-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.abierta { transform: translateX(0); }
+            .main-content { margin-left: 0; width: 100%; }
+            .btn-hamburger-dash { display: block; }
+            .top-bar { padding: 14px 18px; }
+            .panel { padding: 20px 16px; }
+            .kpi-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+            .section-header { flex-direction: column; align-items: flex-start; }
+            .section-header-right { width: 100%; }
+            .search-input { width: 100%; }
+            .form-row { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 480px) {
+            .kpi-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+        <div class="brand-logo">
+            <span class="logo-edu">Edu</span><span class="logo-space">Space</span>
+        </div>
+        <span class="brand-badge">⚙️ Admin</span>
+    </div>
+
+    <nav class="sidebar-nav">
+        <span class="nav-section-label">General</span>
+        <button class="sidebar-link active" onclick="mostrarSeccion('resumen')" id="link-resumen">
+            <span class="si">📊</span> Resumen
+        </button>
+
+        <span class="nav-section-label">Usuarios</span>
+        
+        <button class="sidebar-link" onclick="mostrarSeccion('arrendatarios')" id="link-arrendatarios">
+            <span class="si">🏘️</span> Arrendatarios
+        </button>
+        <button class="sidebar-link" onclick="mostrarSeccion('estudiantes')" id="link-estudiantes">
+            <span class="si">🎓</span> Estudiantes
+        </button>
+        <button class="sidebar-link" onclick="mostrarSeccion('tecnicos')" id="link-tecnicos">
+            <span class="si">🔧</span> Técnicos
+        </button>
+
+        <span class="nav-section-label">Todos</span>
+        <button class="sidebar-link" onclick="mostrarSeccion('todos')" id="link-todos">
+            <span class="si">👥</span> Todos los Usuarios
+        </button>
+    </nav>
+
+    <div class="sidebar-bottom">
+        <div class="sidebar-user">
+            <div class="user-avatar" id="sidebarAvatar">A</div>
+            <div class="user-info">
+                <strong id="sidebarNombre">Admin</strong>
+                <small id="sidebarEmail">admin@demo.com</small>
+            </div>
+        </div>
+        <button class="btn-logout" onclick="cerrarSesion()">
+            <span>🚪</span> Cerrar Sesión
+        </button>
+    </div>
+</aside>
+
+
+<main class="main-content">
+    <div class="top-bar">
+        <div style="display:flex;align-items:center;gap:14px">
+            <button class="btn-hamburger-dash" onclick="toggleSidebar()">☰</button>
+            <h1 id="topBarTitle">📊 Resumen General</h1>
+        </div>
+        <div class="top-bar-right">
+            <span class="top-date" id="topDate"></span>
+        </div>
+    </div>
+
+    <div class="panel">
+
+        
+        <div class="kpi-grid" id="kpiGrid">
+            
+            <div class="kpi-card">
+                <div class="kpi-icon amarillo">🏘️</div>
+                <div>
+                    <div class="kpi-num" id="kpiArrendatario">0</div>
+                    <div class="kpi-label">Arrendatarios</div>
+                </div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-icon verde">🎓</div>
+                <div>
+                    <div class="kpi-num" id="kpiEstudiante">0</div>
+                    <div class="kpi-label">Estudiantes</div>
+                </div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-icon rojo">🔧</div>
+                <div>
+                    <div class="kpi-num" id="kpiTecnico">0</div>
+                    <div class="kpi-label">Técnicos</div>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="page-section activa" id="sec-resumen">
+            <div class="overview-grid">
+                <div class="ov-card">
+                    <h3>📈 Distribución por Rol</h3>
+                    <div id="rolDistribucion"></div>
+                </div>
+                <div class="ov-card">
+                    <h3>🕐 Últimos Registros</h3>
+                    <div id="ultimosRegistros"></div>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="page-section" id="sec-admins">
+            <div class="section-header">
+                <h2>🔐 Administradores</h2>
+                <div class="section-header-right">
+                    <input class="search-input" type="text" placeholder="🔍 Buscar administrador..." oninput="filtrarTabla('admins', this.value)">
+                    <button class="btn-add" onclick="abrirModalCrear('admin')">+ Nuevo Admin</button>
+                </div>
+            </div>
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Usuario</th>
+                            <th>Correo</th>
+                            <th>Teléfono</th>
+                            <th>Fecha Registro</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-admins"></tbody>
+                </table>
+            </div>
+        </div>
+
+        
+        <div class="page-section" id="sec-arrendatarios">
+            <div class="section-header">
+                <h2>🏘️ Arrendatarios / Dueños</h2>
+                <div class="section-header-right">
+                    <input class="search-input" type="text" placeholder="🔍 Buscar arrendatario..." oninput="filtrarTabla('arrendatarios', this.value)">
+                    <button class="btn-add" onclick="abrirModalCrear('arrendatario')">+ Nuevo Arrendatario</button>
+                </div>
+            </div>
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Usuario</th>
+                            <th>Correo</th>
+                            <th>Teléfono</th>
+                            <th>Fecha Registro</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-arrendatarios"></tbody>
+                </table>
+            </div>
+        </div>
+
+        
+        <div class="page-section" id="sec-estudiantes">
+            <div class="section-header">
+                <h2>🎓 Estudiantes / Inquilinos</h2>
+                <div class="section-header-right">
+                    <input class="search-input" type="text" placeholder="🔍 Buscar estudiante..." oninput="filtrarTabla('estudiantes', this.value)">
+                    <button class="btn-add" onclick="abrirModalCrear('estudiante')">+ Nuevo Estudiante</button>
+                </div>
+            </div>
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Usuario</th>
+                            <th>Correo</th>
+                            <th>Teléfono</th>
+                            <th>Fecha Registro</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-estudiantes"></tbody>
+                </table>
+            </div>
+        </div>
+
+        
+        <div class="page-section" id="sec-tecnicos">
+            <div class="section-header">
+                <h2>🔧 Técnicos de Mantenimiento</h2>
+                <div class="section-header-right">
+                    <input class="search-input" type="text" placeholder="🔍 Buscar técnico..." oninput="filtrarTabla('tecnicos', this.value)">
+                    <button class="btn-add" onclick="abrirModalCrear('tecnico')">+ Nuevo Técnico</button>
+                </div>
+            </div>
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Usuario</th>
+                            <th>Correo</th>
+                            <th>Teléfono</th>
+                            <th>Especialidad</th>
+                            <th>Fecha Registro</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-tecnicos"></tbody>
+                </table>
+            </div>
+        </div>
+
+        
+        <div class="page-section" id="sec-todos">
+            <div class="section-header">
+                <h2>👥 Todos los Usuarios</h2>
+                <div class="section-header-right">
+                    <input class="search-input" type="text" placeholder="🔍 Buscar usuario..." oninput="filtrarTabla('todos', this.value)">
+                    <select class="filter-select" onchange="filtrarPorRol(this.value)">
+                        <option value="">Todos los roles</option>
+                        
+                        <option value="arrendatario">Arrendatario</option>
+                        <option value="estudiante">Estudiante</option>
+                        <option value="tecnico">Técnico</option>
+                    </select>
+                </div>
+            </div>
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Usuario</th>
+                            <th>Correo</th>
+                            <th>Teléfono</th>
+                            <th>Rol</th>
+                            <th>Fecha Registro</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-todos"></tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+
+<div class="modal-overlay" id="modalUsuario" onclick="cerrarModalFuera(event,'modalUsuario')">
+    <div class="modal-box">
+        <button class="cerrar-modal" onclick="cerrarModal('modalUsuario')">✕</button>
+        <h3 id="modalTitulo">➕ Nuevo Usuario</h3>
+        <div class="modal-error" id="modalError"></div>
+        <input type="hidden" id="editUserId">
+        <div class="form-row">
+            <div class="form-group">
+                <label>Nombre completo *</label>
+                <input type="text" id="uNombre" placeholder="Nombre apellido" required>
+            </div>
+            <div class="form-group">
+                <label>Rol *</label>
+                <select id="uRol" onchange="actualizarCamposRol()">
+                    
+                    <option value="arrendatario">🏘️ Arrendatario</option>
+                    <option value="estudiante">🎓 Estudiante</option>
+                    <option value="tecnico">🔧 Técnico</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Correo electrónico *</label>
+            <input type="email" id="uEmail" placeholder="correo@ejemplo.com" required>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Teléfono</label>
+                <input type="tel" id="uTel" placeholder="+57 300...">
+            </div>
+            <div class="form-group" id="grupoEspecialidad" style="display:none">
+                <label>Especialidad</label>
+                <select id="uEspecialidad">
+                    <option value="Eléctrica">Eléctrica</option>
+                    <option value="Plomería">Plomería</option>
+                    <option value="General">General</option>
+                    <option value="Carpintería">Carpintería</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group" id="grupoPassword">
+            <label id="passLabel">Contraseña *</label>
+            <input type="password" id="uPass" placeholder="Mínimo 6 caracteres" minlength="6">
+            <div class="form-hint" id="passHint">Dejar vacío para no cambiarla al editar</div>
+        </div>
+        <button class="btn-submit" onclick="guardarUsuario()">💾 Guardar Usuario</button>
+    </div>
+</div>
+
+
+<div class="modal-overlay" id="modalConfirm" onclick="cerrarModalFuera(event,'modalConfirm')">
+    <div class="confirm-box">
+        <div class="confirm-icon">🗑️</div>
+        <h3>¿Eliminar usuario?</h3>
+        <p id="confirmTexto">Esta acción no se puede deshacer.</p>
+        <div class="confirm-btns">
+            <button class="btn-cancel" onclick="cerrarModal('modalConfirm')">Cancelar</button>
+            <button class="btn-confirm-del" onclick="confirmarEliminacion()">Sí, eliminar</button>
+        </div>
+    </div>
+</div>
+
+
+<div class="toast" id="toast"></div>
+
+<script>
+
+
+
+
+let usuarioAEliminar = null;
+let filtroRolActual = '';
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const sesion = verificarSesionAdmin();
+    if (!sesion) return;
+
+    
+    document.getElementById('sidebarAvatar').textContent = iniciales(sesion.nombre);
+    document.getElementById('sidebarNombre').textContent = sesion.nombre;
+    document.getElementById('sidebarEmail').textContent = sesion.email;
+
+    
+    document.getElementById('topDate').textContent = new Date().toLocaleDateString('es-CO', {
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+    });
+
+    actualizarKPIs();
+    renderTabla('resumen');
+    renderTabla('admins');
+    renderTabla('arrendatarios');
+    renderTabla('estudiantes');
+    renderTabla('tecnicos');
+    renderTabla('todos');
+});
+
+
+function verificarSesionAdmin() {
+    const sesion = JSON.parse(localStorage.getItem('eduspace_sesion') || 'null');
+    if (!sesion) { window.location.href = 'index.html'; return null; }
+    if (sesion.rol !== 'admin') {
+        alert('Solo administradores pueden acceder a este panel.');
+        window.location.href = 'index.html';
+        return null;
+    }
+    return sesion;
+}
+
+
+function cerrarSesion() {
+    if (confirm('¿Cerrar sesión?')) {
+        localStorage.removeItem('eduspace_sesion');
+        window.location.href = 'index.html';
+    }
+}
+
+
+function getUsuarios() {
+    return JSON.parse(localStorage.getItem('eduspace_usuarios') || '[]');
+}
+function setUsuarios(arr) {
+    localStorage.setItem('eduspace_usuarios', JSON.stringify(arr));
+}
+function iniciales(nombre) {
+    return (nombre || '?').split(' ').slice(0,2).map(p => p[0]).join('').toUpperCase();
+}
+function avatarClass(rol) {
+    return { admin: 'ta-admin', arrendatario: 'ta-arrendatario', estudiante: 'ta-estudiante', tecnico: 'ta-tecnico' }[rol] || 'ta-admin';
+}
+function rolBadge(rol) {
+    const map = {
+        admin:        '<span class="badge badge-admin">🔐 Admin</span>',
+        arrendatario: '<span class="badge badge-arrendatario">🏘️ Arrendatario</span>',
+        estudiante:   '<span class="badge badge-estudiante">🎓 Estudiante</span>',
+        tecnico:      '<span class="badge badge-tecnico">🔧 Técnico</span>'
+    };
+    return map[rol] || rol;
+}
+
+
+function actualizarKPIs() {
+    const usuarios = getUsuarios();
+    
+    const sinAdmin = usuarios.filter(u => u.rol !== 'admin');
+    const contar   = (rol) => sinAdmin.filter(u => u.rol === rol).length;
+    document.getElementById('kpiArrendatario').textContent = contar('arrendatario');
+    document.getElementById('kpiEstudiante').textContent   = contar('estudiante');
+    document.getElementById('kpiTecnico').textContent      = contar('tecnico');
+    
+    const kpiTotal = document.getElementById('kpiTotal');
+    if (kpiTotal) kpiTotal.textContent = sinAdmin.length;
+}
+
+
+function renderResumen() {
+    const todos = getUsuarios();
+    
+    const usuarios = todos.filter(u => u.rol !== 'admin');
+
+    const roles   = ['arrendatario','estudiante','tecnico'];
+    const colores = { arrendatario: '#F2AB27', estudiante: '#28a745', tecnico: '#BF1120' };
+    const nombres = { arrendatario: 'Arrendatarios', estudiante: 'Estudiantes', tecnico: 'Técnicos' };
+
+    
+    const dist = document.getElementById('rolDistribucion');
+    dist.innerHTML = roles.map(rol => {
+        const n   = usuarios.filter(u => u.rol === rol).length;
+        const pct = usuarios.length ? Math.round(n / usuarios.length * 100) : 0;
+        return `<div class="rol-stat-row">
+            <div class="rol-name">
+                <div class="rol-dot" style="background:${colores[rol]}"></div>
+                <span>${nombres[rol]}</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px">
+                <div style="width:80px;height:6px;background:#f0f0f0;border-radius:3px;overflow:hidden">
+                    <div style="width:${pct}%;height:100%;background:${colores[rol]};border-radius:3px"></div>
+                </div>
+                <span class="rol-count">${n}</span>
+            </div>
+        </div>`;
+    }).join('');
+
+    
+    const ultimos = [...usuarios].reverse().slice(0, 6);
+    const actEl = document.getElementById('ultimosRegistros');
+    if (!ultimos.length) {
+        actEl.innerHTML = '<p style="color:var(--texto-suave);font-size:0.85rem;text-align:center;padding:20px 0">Sin registros aún</p>';
+        return;
+    }
+    actEl.innerHTML = ultimos.map(u => `
+        <div class="activity-item">
+            <div class="act-dot ${u.rol === 'tecnico' ? 'red' : 'green'}"></div>
+            <div style="flex:1">
+                <strong>${u.nombre}</strong>
+                <span style="display:block">${u.email} · ${u.fecha || '—'}</span>
+            </div>
+            ${rolBadge(u.rol)}
+        </div>
+    `).join('');
+}
+
+
+function renderTabla(tipo, filtro = '', rolFiltro = '') {
+    if (tipo === 'resumen') { renderResumen(); return; }
+
+    const usuarios = getUsuarios();
+    let lista;
+
+    if (tipo === 'todos') {
+        
+        lista = usuarios.filter(u => u.rol !== 'admin');
+        if (rolFiltro) lista = lista.filter(u => u.rol === rolFiltro);
+    } else {
+        const rolMap = { admins: 'admin', arrendatarios: 'arrendatario', estudiantes: 'estudiante', tecnicos: 'tecnico' };
+        
+        if (tipo === 'admins') { lista = []; }
+        else { lista = usuarios.filter(u => u.rol === rolMap[tipo]); }
+    }
+
+    if (filtro) {
+        const q = filtro.toLowerCase();
+        lista = lista.filter(u =>
+            u.nombre.toLowerCase().includes(q) ||
+            u.email.toLowerCase().includes(q) ||
+            (u.tel || '').includes(q)
+        );
+    }
+
+    const tbody = document.getElementById(`tabla-${tipo}`);
+    if (!tbody) return;
+
+    if (!lista.length) {
+        const cols = tipo === 'tecnicos' ? 6 : tipo === 'todos' ? 7 : 5;
+        tbody.innerHTML = `<tr class="empty-row"><td colspan="${cols}">Sin usuarios encontrados</td></tr>`;
+        return;
+    }
+
+    tbody.innerHTML = lista.map(u => {
+        const av = `<div class="table-avatar ${avatarClass(u.rol)}">${iniciales(u.nombre)}</div>`;
+        const acciones = `
+            <button class="btn-edit" onclick="abrirModalEditar(${u.id})">✏️ Editar</button>
+            <button class="btn-del" onclick="pedirConfirmacion(${u.id})">🗑️ Eliminar</button>
+        `;
+
+        if (tipo === 'todos') {
+            return `<tr>
+                <td><span style="color:var(--texto-suave);font-size:0.8rem">#${u.id}</span></td>
+                <td><div class="user-cell">${av}<div><strong>${u.nombre}</strong></div></div></td>
+                <td>${u.email}</td>
+                <td>${u.tel || '—'}</td>
+                <td>${rolBadge(u.rol)}</td>
+                <td>${u.fecha || '—'}</td>
+                <td>${acciones}</td>
+            </tr>`;
+        } else if (tipo === 'tecnicos') {
+            return `<tr>
+                <td><div class="user-cell">${av}<div><strong>${u.nombre}</strong></div></div></td>
+                <td>${u.email}</td>
+                <td>${u.tel || '—'}</td>
+                <td>${u.especialidad || 'General'}</td>
+                <td>${u.fecha || '—'}</td>
+                <td>${acciones}</td>
+            </tr>`;
+        } else {
+            return `<tr>
+                <td><div class="user-cell">${av}<div><strong>${u.nombre}</strong></div></div></td>
+                <td>${u.email}</td>
+                <td>${u.tel || '—'}</td>
+                <td>${u.fecha || '—'}</td>
+                <td>${acciones}</td>
+            </tr>`;
+        }
+    }).join('');
+}
+
+
+function filtrarTabla(tipo, valor) {
+    renderTabla(tipo, valor, tipo === 'todos' ? filtroRolActual : '');
+}
+function filtrarPorRol(rol) {
+    filtroRolActual = rol;
+    const q = document.querySelector('#sec-todos .search-input');
+    renderTabla('todos', q ? q.value : '', rol);
+}
+
+
+function abrirModalCrear(rol = 'estudiante') {
+    document.getElementById('editUserId').value = '';
+    document.getElementById('modalTitulo').textContent = '➕ Nuevo Usuario';
+    document.getElementById('uNombre').value = '';
+    document.getElementById('uEmail').value = '';
+    document.getElementById('uTel').value = '';
+    document.getElementById('uPass').value = '';
+    document.getElementById('uRol').value = rol;
+    document.getElementById('passLabel').textContent = 'Contraseña *';
+    document.getElementById('passHint').style.display = 'none';
+    document.getElementById('uPass').required = true;
+    document.getElementById('modalError').style.display = 'none';
+    actualizarCamposRol();
+    document.getElementById('modalUsuario').classList.add('abierto');
+}
+
+
+function abrirModalEditar(id) {
+    const usuarios = getUsuarios();
+    const u = usuarios.find(x => x.id === id);
+    if (!u) return;
+
+    document.getElementById('editUserId').value = u.id;
+    document.getElementById('modalTitulo').textContent = '✏️ Editar Usuario';
+    document.getElementById('uNombre').value = u.nombre;
+    document.getElementById('uEmail').value = u.email;
+    document.getElementById('uTel').value = u.tel || '';
+    document.getElementById('uRol').value = u.rol;
+    document.getElementById('uPass').value = '';
+    document.getElementById('passLabel').textContent = 'Nueva Contraseña';
+    document.getElementById('passHint').style.display = 'block';
+    document.getElementById('uPass').required = false;
+    document.getElementById('modalError').style.display = 'none';
+    actualizarCamposRol();
+    if (u.especialidad) document.getElementById('uEspecialidad').value = u.especialidad;
+    document.getElementById('modalUsuario').classList.add('abierto');
+}
+
+
+function actualizarCamposRol() {
+    const rol = document.getElementById('uRol').value;
+    document.getElementById('grupoEspecialidad').style.display = rol === 'tecnico' ? 'block' : 'none';
+}
+
+
+function guardarUsuario() {
+    const id       = document.getElementById('editUserId').value;
+    const nombre   = document.getElementById('uNombre').value.trim();
+    const email    = document.getElementById('uEmail').value.trim();
+    const tel      = document.getElementById('uTel').value.trim();
+    const rol      = document.getElementById('uRol').value;
+    const pass     = document.getElementById('uPass').value;
+    const espec    = document.getElementById('uEspecialidad').value;
+    const errEl    = document.getElementById('modalError');
+
+    errEl.style.display = 'none';
+
+    if (!nombre || !email) {
+        errEl.textContent = '❌ Nombre y correo son obligatorios.';
+        errEl.style.display = 'block';
+        return;
+    }
+    if (!id && pass.length < 6) {
+        errEl.textContent = '❌ La contraseña debe tener al menos 6 caracteres.';
+        errEl.style.display = 'block';
+        return;
+    }
+
+    const usuarios = getUsuarios();
+
+    if (id) {
+        
+        const numId = parseInt(id);
+        const idx = usuarios.findIndex(u => u.id === numId);
+        if (idx === -1) return;
+
+        
+        if (usuarios.find(u => u.email === email && u.id !== numId)) {
+            errEl.textContent = '❌ Ese correo ya está en uso por otro usuario.';
+            errEl.style.display = 'block';
+            return;
+        }
+
+        usuarios[idx].nombre = nombre;
+        usuarios[idx].email  = email;
+        usuarios[idx].tel    = tel;
+        usuarios[idx].rol    = rol;
+        if (rol === 'tecnico') usuarios[idx].especialidad = espec;
+        if (pass) usuarios[idx].password = pass;
+
+        setUsuarios(usuarios);
+        mostrarToast('✅ Usuario actualizado correctamente', 'success');
+    } else {
+        
+        if (usuarios.find(u => u.email === email)) {
+            errEl.textContent = '❌ Ese correo ya está registrado.';
+            errEl.style.display = 'block';
+            return;
+        }
+
+        const nuevo = {
+            id: Date.now(),
+            nombre, email,
+            password: pass,
+            rol, tel,
+            fecha: new Date().toLocaleDateString('es-CO')
+        };
+        if (rol === 'tecnico') nuevo.especialidad = espec;
+
+        usuarios.push(nuevo);
+        setUsuarios(usuarios);
+        mostrarToast('🎉 Usuario creado exitosamente', 'success');
+    }
+
+    cerrarModal('modalUsuario');
+    actualizarKPIs();
+    ['admins','arrendatarios','estudiantes','tecnicos','todos','resumen'].forEach(t => renderTabla(t));
+}
+
+
+function pedirConfirmacion(id) {
+    const u = getUsuarios().find(x => x.id === id);
+    if (!u) return;
+    usuarioAEliminar = id;
+    document.getElementById('confirmTexto').textContent = `¿Eliminar a "${u.nombre}" (${u.email})? Esta acción no se puede deshacer.`;
+    document.getElementById('modalConfirm').classList.add('abierto');
+}
+function confirmarEliminacion() {
+    if (!usuarioAEliminar) return;
+    const usuarios = getUsuarios().filter(u => u.id !== usuarioAEliminar);
+    setUsuarios(usuarios);
+    usuarioAEliminar = null;
+    cerrarModal('modalConfirm');
+    actualizarKPIs();
+    ['admins','arrendatarios','estudiantes','tecnicos','todos','resumen'].forEach(t => renderTabla(t));
+    mostrarToast('🗑️ Usuario eliminado', 'error');
+}
+
+
+function mostrarSeccion(id) {
+    document.querySelectorAll('.page-section').forEach(s => s.classList.remove('activa'));
+    document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+
+    const sec = document.getElementById(`sec-${id}`);
+    if (sec) sec.classList.add('activa');
+
+    const link = document.getElementById(`link-${id}`);
+    if (link) link.classList.add('active');
+
+    const titulos = {
+        resumen: '📊 Resumen General',
+        admins: '🔐 Administradores',
+        arrendatarios: '🏘️ Arrendatarios',
+        estudiantes: '🎓 Estudiantes',
+        tecnicos: '🔧 Técnicos',
+        todos: '👥 Todos los Usuarios'
+    };
+    document.getElementById('topBarTitle').textContent = titulos[id] || 'Panel Admin';
+
+    
+    if (window.innerWidth <= 768) {
+        document.getElementById('sidebar').classList.remove('abierta');
+    }
+}
+
+
+function cerrarModal(id) {
+    document.getElementById(id).classList.remove('abierto');
+}
+function cerrarModalFuera(event, id) {
+    if (event.target.id === id) cerrarModal(id);
+}
+
+
+function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('abierta');
+}
+
+
+function mostrarToast(msg, tipo = 'info') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    const c = { success: '#28a745', error: '#BF1120', info: '#034C8C' };
+    t.style.background = c[tipo] || c.info;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3500);
+}
+</script>
+</body>
+</html>

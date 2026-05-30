@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduSpace | Panel Técnico</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --rojo:#BF1120; --azul:#034C8C; --azul-claro:#0a5fa8;
+            --amarillo:#F2AB27; --gris:#F2F2F2; --gris-med:#e0e0e0;
+            --blanco:#FFFFFF; --texto:#1a1a2e; --texto-suave:#666;
+            --sidebar-w:240px; --sombra:0 2px 12px rgba(0,0,0,0.07);
+            --radio:12px; --verde:#28a745; --morado:#6f42c1;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Poppins',sans-serif; background:var(--gris); color:var(--texto); display:flex; min-height:100vh; }
+
+        .sidebar { width:var(--sidebar-w); background:linear-gradient(180deg,#1a0a00,#7c3a00); color:#fff; display:flex; flex-direction:column; position:fixed; top:0; left:0; bottom:0; z-index:100; transition:transform 0.3s; }
+        .sidebar-brand { padding:28px 22px 20px; border-bottom:1px solid rgba(255,255,255,0.1); }
+        .brand-logo { font-size:1.5rem; font-weight:800; }
+        .logo-edu { color:#fff; } .logo-space { color:var(--amarillo); }
+        .brand-badge { display:inline-block; margin-top:6px; background:var(--rojo); color:#fff; font-size:0.68rem; font-weight:800; padding:2px 9px; border-radius:50px; text-transform:uppercase; }
+        .sidebar-nav { flex:1; padding:20px 12px; display:flex; flex-direction:column; gap:3px; }
+        .nav-label { font-size:0.68rem; font-weight:700; color:rgba(255,255,255,0.35); text-transform:uppercase; letter-spacing:1px; padding:12px 16px 6px; }
+        .sidebar-link { display:flex; align-items:center; gap:12px; padding:11px 16px; border-radius:var(--radio); color:rgba(255,255,255,0.65); cursor:pointer; font-size:0.88rem; font-weight:600; transition:all 0.25s; border:none; background:transparent; width:100%; text-align:left; font-family:'Poppins',sans-serif; }
+        .sidebar-link:hover { background:rgba(255,255,255,0.08); color:#fff; }
+        .sidebar-link.active { background:rgba(255,255,255,0.15); color:#fff; border-left:3px solid var(--amarillo); }
+        .si { font-size:1.05rem; width:20px; text-align:center; }
+        .sidebar-bottom { padding:16px 12px; border-top:1px solid rgba(255,255,255,0.1); }
+        .sidebar-user { display:flex; align-items:center; gap:10px; padding:10px 14px; border-radius:var(--radio); margin-bottom:8px; }
+        .user-avatar { width:36px; height:36px; background:var(--rojo); border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:0.85rem; color:#fff; flex-shrink:0; }
+        .user-info strong { display:block; font-size:0.82rem; color:#fff; }
+        .user-info small { font-size:0.72rem; color:rgba(255,255,255,0.5); }
+        .btn-logout { display:flex; align-items:center; gap:8px; width:100%; padding:9px 14px; background:rgba(191,17,32,0.2); color:#ff6b7a; border:none; border-radius:var(--radio); cursor:pointer; font-size:0.85rem; font-weight:700; font-family:'Poppins',sans-serif; transition:all 0.25s; }
+        .btn-logout:hover { background:rgba(191,17,32,0.4); color:#fff; }
+
+        .main-content { margin-left:var(--sidebar-w); width:calc(100% - var(--sidebar-w)); min-height:100vh; }
+        .top-bar { background:#fff; padding:16px 32px; display:flex; align-items:center; justify-content:space-between; box-shadow:0 2px 8px rgba(0,0,0,0.05); position:sticky; top:0; z-index:50; }
+        .top-bar h1 { font-size:1.15rem; font-weight:700; }
+        .btn-hamburger-dash { display:none; background:none; border:none; font-size:1.3rem; cursor:pointer; }
+        .panel { padding:28px 32px; }
+
+        .kpi-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:18px; margin-bottom:28px; }
+        .kpi-card { background:#fff; border-radius:var(--radio); padding:20px 22px; box-shadow:var(--sombra); display:flex; align-items:center; gap:14px; transition:transform 0.25s; cursor:pointer; }
+        .kpi-card:hover { transform:translateY(-3px); }
+        .kpi-card.activa { border-bottom:3px solid var(--azul); }
+        .kpi-icon { width:50px; height:50px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .kpi-icon.rojo { background:rgba(191,17,32,0.1); }
+        .kpi-icon.morado { background:rgba(111,66,193,0.1); }
+        .kpi-icon.amarillo { background:rgba(242,171,39,0.12); }
+        .kpi-icon.verde { background:rgba(40,167,69,0.1); }
+        .kpi-num { font-size:1.9rem; font-weight:800; color:var(--azul); line-height:1; }
+        .kpi-label { font-size:0.77rem; color:var(--texto-suave); margin-top:2px; font-weight:600; }
+
+        .page-section { display:none; }
+        .page-section.activa { display:block; }
+
+        .section-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; flex-wrap:wrap; gap:12px; }
+        .section-header h2 { font-size:1.1rem; font-weight:700; }
+        .section-header-right { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+        .filter-select { padding:9px 14px; border:2px solid var(--gris-med); border-radius:50px; font-family:'Poppins',sans-serif; font-size:0.85rem; outline:none; background:#fff; cursor:pointer; transition:border-color 0.25s; }
+        .filter-select:focus { border-color:var(--azul); }
+        .search-input { padding:9px 16px; border:2px solid var(--gris-med); border-radius:50px; font-family:'Poppins',sans-serif; font-size:0.85rem; outline:none; transition:border-color 0.25s; width:220px; }
+        .search-input:focus { border-color:var(--azul); }
+
+        .reporte-card {
+            background:#fff;
+            border-radius:var(--radio);
+            box-shadow:var(--sombra);
+            margin-bottom:16px;
+            overflow:hidden;
+            transition:transform 0.2s;
+        }
+        .reporte-card:hover { transform:translateY(-2px); }
+        .reporte-card-header {
+            padding:18px 22px 14px;
+            display:flex;
+            justify-content:space-between;
+            align-items:flex-start;
+            gap:14px;
+            flex-wrap:wrap;
+        }
+        .reporte-titulo { font-size:1rem; font-weight:700; color:var(--texto); margin-bottom:5px; }
+        .reporte-meta { font-size:0.8rem; color:var(--texto-suave); display:flex; flex-wrap:wrap; gap:10px; }
+        .reporte-meta span { display:flex; align-items:center; gap:4px; }
+        .reporte-badges { display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
+
+        .reporte-body { padding:0 22px 14px; }
+        .reporte-descripcion { font-size:0.88rem; color:var(--texto); line-height:1.6; padding:12px 14px; background:var(--gris); border-radius:8px; }
+
+        .reporte-footer {
+            padding:14px 22px;
+            background:#f9f9f9;
+            border-top:1px solid var(--gris);
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            flex-wrap:wrap;
+            gap:10px;
+        }
+        .estado-label { font-size:0.82rem; font-weight:700; color:var(--texto-suave); }
+
+        .stepper { display:flex; gap:6px; flex-wrap:wrap; }
+        .step-btn {
+            padding:7px 14px;
+            border:2px solid var(--gris-med);
+            border-radius:50px;
+            font-family:'Poppins',sans-serif;
+            font-size:0.78rem;
+            font-weight:700;
+            cursor:pointer;
+            transition:all 0.2s;
+            background:#fff;
+            color:var(--texto-suave);
+        }
+        .step-btn:hover { border-color:var(--azul); color:var(--azul); }
+        .step-btn.step-recibido.activo { border-color:var(--morado); background:rgba(111,66,193,0.1); color:var(--morado); }
+        .step-btn.step-en_proceso.activo { border-color:var(--amarillo); background:rgba(242,171,39,0.1); color:#856404; }
+        .step-btn.step-resuelto.activo { border-color:var(--verde); background:rgba(40,167,69,0.1); color:#155724; }
+        .step-btn.step-pendiente.activo { border-color:var(--rojo); background:rgba(191,17,32,0.08); color:var(--rojo); }
+
+        .nota-form { margin-top:10px; }
+        .nota-input { width:100%; padding:9px 13px; border:2px solid var(--gris-med); border-radius:8px; font-family:'Poppins',sans-serif; font-size:0.85rem; resize:none; outline:none; transition:border-color 0.2s; }
+        .nota-input:focus { border-color:var(--azul); }
+        .btn-nota { margin-top:6px; padding:7px 16px; background:var(--azul); color:#fff; border:none; border-radius:8px; font-family:'Poppins',sans-serif; font-size:0.82rem; font-weight:700; cursor:pointer; transition:all 0.2s; }
+        .btn-nota:hover { background:var(--azul-claro); }
+        .nota-guardada { font-size:0.82rem; color:var(--texto-suave); font-style:italic; margin-top:6px; padding:8px 12px; background:var(--gris); border-radius:6px; }
+
+        .prio-bar { width:4px; border-radius:4px; align-self:stretch; flex-shrink:0; min-height:40px; }
+        .prio-urgente { background:var(--rojo); }
+        .prio-alta { background:#e67e22; }
+        .prio-media { background:var(--amarillo); }
+        .prio-baja { background:var(--verde); }
+
+        .badge { padding:3px 10px; border-radius:50px; font-size:0.75rem; font-weight:700; display:inline-block; white-space:nowrap; }
+        .badge-urgente { background:#f8d7da; color:#721c24; }
+        .badge-alta { background:#ffe5d0; color:#7c3a00; }
+        .badge-media { background:#fff3cd; color:#856404; }
+        .badge-baja { background:#d4edda; color:#155724; }
+        .badge-pendiente { background:#f8d7da; color:var(--rojo); }
+        .badge-recibido { background:#e8d5f5; color:var(--morado); }
+        .badge-en_proceso { background:#fff3cd; color:#856404; }
+        .badge-resuelto { background:#d4edda; color:#155724; }
+
+        .resumen-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+        .ov-card { background:#fff; border-radius:var(--radio); padding:24px; box-shadow:var(--sombra); }
+        .ov-card h3 { font-size:0.95rem; font-weight:700; color:var(--azul); margin-bottom:16px; padding-bottom:12px; border-bottom:2px solid var(--gris); }
+        .stat-row { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--gris); font-size:0.88rem; }
+        .stat-row:last-child { border-bottom:none; }
+        .stat-row .stat-num { font-size:1.4rem; font-weight:800; color:var(--azul); }
+        .progreso-bar { height:8px; background:var(--gris); border-radius:4px; overflow:hidden; margin-top:4px; }
+        .progreso-fill { height:100%; border-radius:4px; transition:width 0.5s ease; }
+
+        .empty-state { text-align:center; padding:50px 20px; color:var(--texto-suave); background:#fff; border-radius:var(--radio); box-shadow:var(--sombra); }
+        .empty-state .empty-icon { font-size:2.5rem; margin-bottom:12px; }
+
+        .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:999; justify-content:center; align-items:center; padding:20px; }
+        .modal-overlay.abierto { display:flex; }
+        .modal-box { background:#fff; border-radius:var(--radio); padding:28px; width:100%; max-width:560px; position:relative; border-top:4px solid var(--rojo); animation:modalIn 0.3s ease; max-height:90vh; overflow-y:auto; }
+        @keyframes modalIn { from{opacity:0;transform:scale(0.92)} to{opacity:1;transform:scale(1)} }
+        .modal-box h3 { color:var(--azul); font-size:1.1rem; margin-bottom:18px; }
+        .cerrar-modal { position:absolute; top:14px; right:14px; background:var(--gris); border:none; width:30px; height:30px; border-radius:50%; cursor:pointer; font-size:0.85rem; }
+        .cerrar-modal:hover { background:var(--gris-med); }
+        .detalle-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px; }
+        .detalle-item { background:var(--gris); border-radius:8px; padding:12px 14px; }
+        .detalle-item label { display:block; font-size:0.72rem; font-weight:700; color:var(--texto-suave); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px; }
+        .detalle-item span { font-size:0.9rem; font-weight:600; color:var(--texto); }
+
+        .toast { position:fixed; bottom:25px; right:25px; background:#011c35; color:#fff; padding:12px 22px; border-radius:10px; font-size:0.88rem; font-weight:600; z-index:9999; transform:translateY(100px); opacity:0; transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1); box-shadow:0 8px 25px rgba(0,0,0,0.2); max-width:320px; }
+        .toast.show { transform:translateY(0); opacity:1; }
+
+        @media(max-width:900px) { .kpi-grid { grid-template-columns:1fr 1fr; } .resumen-grid { grid-template-columns:1fr; } }
+        @media(max-width:768px) { .sidebar { transform:translateX(-100%); } .sidebar.abierta { transform:translateX(0); } .main-content { margin-left:0; width:100%; } .btn-hamburger-dash { display:block; } .top-bar,.panel { padding:14px 16px; } .kpi-grid { grid-template-columns:1fr 1fr; gap:10px; } .detalle-grid { grid-template-columns:1fr; } }
+        @media(max-width:480px) { .kpi-grid { grid-template-columns:1fr 1fr; } }
+    </style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+        <div class="brand-logo"><span class="logo-edu">Edu</span><span class="logo-space">Space</span></div>
+        <span class="brand-badge">🔧 Técnico</span>
+    </div>
+    <nav class="sidebar-nav">
+        <span class="nav-label">General</span>
+        <button class="sidebar-link active" onclick="mostrarSeccion('resumen')" id="link-resumen"><span class="si">📊</span> Resumen</button>
+        <span class="nav-label">Reportes</span>
+        <button class="sidebar-link" onclick="mostrarSeccion('pendientes')" id="link-pendientes"><span class="si">🔴</span> Pendientes</button>
+        <button class="sidebar-link" onclick="mostrarSeccion('recibidos')" id="link-recibidos"><span class="si">📬</span> Recibidos</button>
+        <button class="sidebar-link" onclick="mostrarSeccion('en_proceso')" id="link-en_proceso"><span class="si">⚙️</span> En Proceso</button>
+        <button class="sidebar-link" onclick="mostrarSeccion('resueltos')" id="link-resueltos"><span class="si">✅</span> Resueltos</button>
+        <span class="nav-label">Vista</span>
+        <button class="sidebar-link" onclick="mostrarSeccion('todos')" id="link-todos"><span class="si">📋</span> Todos los Reportes</button>
+    </nav>
+    <div class="sidebar-bottom">
+        <div class="sidebar-user">
+            <div class="user-avatar" id="sidebarAvatar">T</div>
+            <div class="user-info"><strong id="sidebarNombre">Técnico</strong><small id="sidebarEmail">—</small></div>
+        </div>
+        <button class="btn-logout" onclick="cerrarSesion()"><span>🚪</span> Cerrar Sesión</button>
+    </div>
+</aside>
+
+<main class="main-content">
+    <div class="top-bar">
+        <div style="display:flex;align-items:center;gap:14px">
+            <button class="btn-hamburger-dash" onclick="toggleSidebar()">☰</button>
+            <h1 id="topBarTitle">📊 Resumen</h1>
+        </div>
+        <span style="font-size:0.82rem;color:var(--texto-suave)" id="topDate"></span>
+    </div>
+
+    <div class="panel">
+
+        <div class="kpi-grid">
+            <div class="kpi-card" onclick="mostrarSeccion('pendientes')">
+                <div class="kpi-icon rojo">🔴</div>
+                <div><div class="kpi-num" id="kpiPendientes">0</div><div class="kpi-label">Pendientes</div></div>
+            </div>
+            <div class="kpi-card" onclick="mostrarSeccion('recibidos')">
+                <div class="kpi-icon morado">📬</div>
+                <div><div class="kpi-num" id="kpiRecibidos">0</div><div class="kpi-label">Recibidos</div></div>
+            </div>
+            <div class="kpi-card" onclick="mostrarSeccion('en_proceso')">
+                <div class="kpi-icon amarillo">⚙️</div>
+                <div><div class="kpi-num" id="kpiEnProceso">0</div><div class="kpi-label">En Proceso</div></div>
+            </div>
+            <div class="kpi-card" onclick="mostrarSeccion('resueltos')">
+                <div class="kpi-icon verde">✅</div>
+                <div><div class="kpi-num" id="kpiResueltos">0</div><div class="kpi-label">Resueltos</div></div>
+            </div>
+        </div>
+
+        <div class="page-section activa" id="sec-resumen">
+            <div class="resumen-grid">
+                <div class="ov-card">
+                    <h3>📈 Estado General de Reportes</h3>
+                    <div id="resumenEstados"></div>
+                </div>
+                <div class="ov-card">
+                    <h3>🔴 Reportes Urgentes Activos</h3>
+                    <div id="resumenUrgentes"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-section" id="sec-pendientes">
+            <div class="section-header">
+                <h2>🔴 Reportes Pendientes</h2>
+                <div class="section-header-right">
+                    <select class="filter-select" onchange="filtrarLista('pendientes','prioridad',this.value)">
+                        <option value="">Todas las prioridades</option>
+                        <option value="urgente">🔴 Urgente</option>
+                        <option value="alta">🟠 Alta</option>
+                        <option value="media">🟡 Media</option>
+                        <option value="baja">🟢 Baja</option>
+                    </select>
+                </div>
+            </div>
+            <div id="lista-pendientes"></div>
+        </div>
+
+        <div class="page-section" id="sec-recibidos">
+            <div class="section-header"><h2>📬 Reportes Recibidos</h2></div>
+            <div id="lista-recibidos"></div>
+        </div>
+
+        <div class="page-section" id="sec-en_proceso">
+            <div class="section-header"><h2>⚙️ En Proceso</h2></div>
+            <div id="lista-en_proceso"></div>
+        </div>
+
+        <div class="page-section" id="sec-resueltos">
+            <div class="section-header"><h2>✅ Resueltos</h2></div>
+            <div id="lista-resueltos"></div>
+        </div>
+
+        <div class="page-section" id="sec-todos">
+            <div class="section-header">
+                <h2>📋 Todos los Reportes</h2>
+                <div class="section-header-right">
+                    <input class="search-input" type="text" placeholder="🔍 Buscar reporte..." oninput="buscarReportes(this.value)">
+                    <select class="filter-select" onchange="filtrarLista('todos','estado',this.value)">
+                        <option value="">Todos los estados</option>
+                        <option value="pendiente">Pendiente</option>
+                        <option value="recibido">Recibido</option>
+                        <option value="en_proceso">En Proceso</option>
+                        <option value="resuelto">Resuelto</option>
+                    </select>
+                    <select class="filter-select" onchange="filtrarLista('todos','prioridad',this.value)">
+                        <option value="">Todas las prioridades</option>
+                        <option value="urgente">🔴 Urgente</option>
+                        <option value="alta">🟠 Alta</option>
+                        <option value="media">🟡 Media</option>
+                        <option value="baja">🟢 Baja</option>
+                    </select>
+                </div>
+            </div>
+            <div id="lista-todos"></div>
+        </div>
+
+    </div>
+</main>
+
+<div class="modal-overlay" id="modalDetalle" onclick="cerrarModalFuera(event,'modalDetalle')">
+    <div class="modal-box">
+        <button class="cerrar-modal" onclick="cerrarModal('modalDetalle')">✕</button>
+        <h3 id="detalleTitulo">📋 Detalle del Reporte</h3>
+        <div id="detalleContenido"></div>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const filtrosActivos = { todos: {}, pendientes: {}, recibidos: {}, en_proceso: {}, resueltos: {} };
+let busqueda = '';
+
+document.addEventListener('DOMContentLoaded', () => {
+    const sesion = JSON.parse(localStorage.getItem('eduspace_sesion') || 'null');
+    if (!sesion) { window.location.href = 'index.html'; return; }
+    if (sesion.rol !== 'tecnico') { alert('Acceso denegado.'); window.location.href = 'index.html'; return; }
+
+    document.getElementById('sidebarAvatar').textContent = iniciales(sesion.nombre);
+    document.getElementById('sidebarNombre').textContent = sesion.nombre;
+    document.getElementById('sidebarEmail').textContent = sesion.email;
+    document.getElementById('topDate').textContent = new Date().toLocaleDateString('es-CO',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+
+    actualizarKPIs();
+    renderResumen();
+    renderLista('pendientes');
+    renderLista('recibidos');
+    renderLista('en_proceso');
+    renderLista('resueltos');
+    renderLista('todos');
+});
+
+function getReportes() { return JSON.parse(localStorage.getItem('eduspace_reportes') || '[]'); }
+function setReportes(arr) { localStorage.setItem('eduspace_reportes', JSON.stringify(arr)); }
+function iniciales(n) { return (n||'?').split(' ').slice(0,2).map(p=>p[0]).join('').toUpperCase(); }
+
+const ESTADOS = ['pendiente','recibido','en_proceso','resuelto'];
+const ESTADO_LABELS = { pendiente:'🔴 Pendiente', recibido:'📬 Recibido', en_proceso:'⚙️ En Proceso', resuelto:'✅ Resuelto' };
+const ESTADO_NEXT = { pendiente:'recibido', recibido:'en_proceso', en_proceso:'resuelto' };
+const PRIO_COLORS = { urgente:'var(--rojo)', alta:'#e67e22', media:'var(--amarillo)', baja:'var(--verde)' };
+const PRIO_LABELS = { urgente:'🔴 Urgente', alta:'🟠 Alta', media:'🟡 Media', baja:'🟢 Baja' };
+
+function estadoBadge(est) {
+    const m = { pendiente:'badge-pendiente', recibido:'badge-recibido', en_proceso:'badge-en_proceso', resuelto:'badge-resuelto' };
+    return `<span class="badge ${m[est]||''}">${ESTADO_LABELS[est]||est}</span>`;
+}
+function prioBadge(prio) {
+    const m = { urgente:'badge-urgente', alta:'badge-alta', media:'badge-media', baja:'badge-baja' };
+    return `<span class="badge ${m[prio]||''}">${PRIO_LABELS[prio]||prio}</span>`;
+}
+
+function actualizarKPIs() {
+    const rep = getReportes();
+    document.getElementById('kpiPendientes').textContent = rep.filter(r=>r.estado==='pendiente').length;
+    document.getElementById('kpiRecibidos').textContent = rep.filter(r=>r.estado==='recibido').length;
+    document.getElementById('kpiEnProceso').textContent = rep.filter(r=>r.estado==='en_proceso').length;
+    document.getElementById('kpiResueltos').textContent = rep.filter(r=>r.estado==='resuelto').length;
+}
+
+function renderResumen() {
+    const rep = getReportes();
+    const total = rep.length;
+
+    
+    const estEl = document.getElementById('resumenEstados');
+    const estadoData = ESTADOS.map(est => ({
+        est, n: rep.filter(r=>r.estado===est).length,
+        color: { pendiente:'var(--rojo)', recibido:'var(--morado)', en_proceso:'var(--amarillo)', resuelto:'var(--verde)' }[est]
+    }));
+    estEl.innerHTML = total === 0
+        ? '<p style="color:var(--texto-suave);font-size:0.85rem;text-align:center;padding:20px">Sin reportes registrados</p>'
+        : estadoData.map(d => `
+            <div class="stat-row">
+                <div>
+                    <span style="font-weight:600">${ESTADO_LABELS[d.est]}</span>
+                    <div class="progreso-bar"><div class="progreso-fill" style="width:${total?Math.round(d.n/total*100):0}%;background:${d.color}"></div></div>
+                </div>
+                <span class="stat-num">${d.n}</span>
+            </div>`).join('');
+
+    const urgentes = rep.filter(r=>r.prioridad==='urgente' && r.estado!=='resuelto');
+    const urgEl = document.getElementById('resumenUrgentes');
+    urgEl.innerHTML = urgentes.length
+        ? urgentes.slice(0,5).map(r=>`
+            <div style="padding:10px 0;border-bottom:1px solid var(--gris);font-size:0.85rem;cursor:pointer" onclick="abrirDetalle(${r.id})">
+                <strong style="display:block;color:var(--rojo)">${r.titulo}</strong>
+                <span style="color:var(--texto-suave)">${r.nombreEstudiante} · ${r.nombreInmueble||'—'} · ${r.fecha}</span>
+                <div style="margin-top:4px">${estadoBadge(r.estado)}</div>
+            </div>`).join('')
+        : '<p style="color:var(--texto-suave);font-size:0.85rem;text-align:center;padding:20px">Sin reportes urgentes activos 🎉</p>';
+}
+
+function renderLista(tipo, filtroEstado = '', filtroPrio = '', busq = '') {
+    let rep = getReportes();
+
+    if (tipo !== 'todos') {
+        const estadoMap = { pendientes:'pendiente', recibidos:'recibido', en_proceso:'en_proceso', resueltos:'resuelto' };
+        rep = rep.filter(r => r.estado === estadoMap[tipo]);
+    }
+    if (filtroEstado) rep = rep.filter(r => r.estado === filtroEstado);
+    if (filtroPrio) rep = rep.filter(r => r.prioridad === filtroPrio);
+    if (busq) { const q = busq.toLowerCase(); rep = rep.filter(r => r.titulo.toLowerCase().includes(q) || (r.nombreEstudiante||'').toLowerCase().includes(q) || (r.nombreInmueble||'').toLowerCase().includes(q)); }
+
+    
+    const prioOrder = {urgente:0,alta:1,media:2,baja:3};
+    rep.sort((a,b) => (prioOrder[a.prioridad]||3) - (prioOrder[b.prioridad]||3));
+
+    const el = document.getElementById(`lista-${tipo}`);
+    if (!el) return;
+
+    if (!rep.length) {
+        el.innerHTML = `<div class="empty-state"><div class="empty-icon">✅</div><p>No hay reportes en esta sección</p></div>`;
+        return;
+    }
+
+    el.innerHTML = rep.map(r => {
+        const esResuelto = r.estado === 'resuelto';
+        return `
+        <div class="reporte-card" style="display:flex">
+            <div class="prio-bar prio-${r.prioridad}"></div>
+            <div style="flex:1">
+                <div class="reporte-card-header">
+                    <div style="flex:1">
+                        <div class="reporte-titulo">${r.titulo}</div>
+                        <div class="reporte-meta">
+                            <span>👤 ${r.nombreEstudiante||'—'}</span>
+                            <span>🏘️ ${r.nombreInmueble||'—'}${r.habitacion ? ' · '+r.habitacion : ''}</span>
+                            <span>📅 ${r.fecha}</span>
+                            ${r.ubicacion ? `<span>📍 ${r.ubicacion}</span>` : ''}
+                        </div>
+                    </div>
+                    <div class="reporte-badges">
+                        ${prioBadge(r.prioridad)}
+                        ${estadoBadge(r.estado)}
+                        <button onclick="abrirDetalle(${r.id})" style="padding:5px 10px;background:rgba(3,76,140,0.08);color:var(--azul);border:none;border-radius:6px;font-family:'Poppins',sans-serif;font-size:0.78rem;font-weight:700;cursor:pointer">Ver más</button>
+                    </div>
+                </div>
+                <div class="reporte-body">
+                    <div class="reporte-descripcion">${r.descripcion}</div>
+                </div>
+                <div class="reporte-footer">
+                    <div>
+                        <div class="estado-label">Cambiar estado:</div>
+                        <div class="stepper">
+                            ${ESTADOS.map(est => `
+                                <button class="step-btn step-${est} ${r.estado===est?'activo':''}"
+                                    onclick="cambiarEstado(${r.id},'${est}')"
+                                    title="${ESTADO_LABELS[est]}">
+                                    ${{pendiente:'🔴',recibido:'📬',en_proceso:'⚙️',resuelto:'✅'}[est]}
+                                    ${{pendiente:'Pendiente',recibido:'Recibido',en_proceso:'En proceso',resuelto:'Resuelto'}[est]}
+                                </button>`).join('')}
+                        </div>
+                    </div>
+                </div>
+                ${!esResuelto ? `
+                <div style="padding:0 22px 16px">
+                    <div class="nota-form">
+                        <textarea class="nota-input" rows="2" placeholder="Agregar nota técnica (ej: revisé el sistema eléctrico, pendiente repuesto...)" id="nota-${r.id}">${r.notaTecnica||''}</textarea>
+                        <button class="btn-nota" onclick="guardarNota(${r.id})">💾 Guardar nota</button>
+                    </div>
+                    ${r.notaTecnica ? `<div class="nota-guardada">📝 Última nota: ${r.notaTecnica}</div>` : ''}
+                </div>` : `
+                <div style="padding:0 22px 16px">
+                    ${r.notaTecnica ? `<div class="nota-guardada">📝 Nota técnica: ${r.notaTecnica}</div>` : ''}
+                    <div style="font-size:0.82rem;color:var(--verde);font-weight:700;margin-top:6px">✅ Reporte cerrado · ${r.fechaResolucion||''}</div>
+                </div>`}
+            </div>
+        </div>`;
+    }).join('');
+}
+
+function cambiarEstado(id, nuevoEstado) {
+    const rep = getReportes();
+    const idx = rep.findIndex(r => r.id === id);
+    if (idx === -1) return;
+
+    rep[idx].estado = nuevoEstado;
+    if (nuevoEstado === 'resuelto') {
+        rep[idx].fechaResolucion = new Date().toLocaleDateString('es-CO');
+    }
+    setReportes(rep);
+
+    actualizarKPIs();
+    renderResumen();
+    ['pendientes','recibidos','en_proceso','resueltos','todos'].forEach(t => renderLista(t));
+
+    const labels = { pendiente:'🔴 Marcado como Pendiente', recibido:'📬 Reporte marcado como Recibido', en_proceso:'⚙️ En Proceso', resuelto:'✅ Reporte marcado como Resuelto' };
+    mostrarToast(labels[nuevoEstado], nuevoEstado === 'resuelto' ? 'success' : 'info');
+}
+
+function guardarNota(id) {
+    const nota = document.getElementById(`nota-${id}`)?.value?.trim();
+    const rep = getReportes();
+    const idx = rep.findIndex(r => r.id === id);
+    if (idx === -1) return;
+    rep[idx].notaTecnica = nota;
+    setReportes(rep);
+    actualizarKPIs();
+    ['pendientes','recibidos','en_proceso','resueltos','todos'].forEach(t => renderLista(t));
+    mostrarToast('📝 Nota guardada', 'info');
+}
+
+function abrirDetalle(id) {
+    const r = getReportes().find(x => x.id === id);
+    if (!r) return;
+    document.getElementById('detalleTitulo').textContent = `📋 ${r.titulo}`;
+    document.getElementById('detalleContenido').innerHTML = `
+        <div class="detalle-grid">
+            <div class="detalle-item"><label>Estudiante</label><span>${r.nombreEstudiante||'—'}</span></div>
+            <div class="detalle-item"><label>Inmueble</label><span>${r.nombreInmueble||'—'}</span></div>
+            <div class="detalle-item"><label>Habitación</label><span>${r.habitacion||'—'}</span></div>
+            <div class="detalle-item"><label>Ubicación del daño</label><span>${r.ubicacion||'No especificada'}</span></div>
+            <div class="detalle-item"><label>Prioridad</label><span>${prioBadge(r.prioridad)}</span></div>
+            <div class="detalle-item"><label>Estado</label><span>${estadoBadge(r.estado)}</span></div>
+            <div class="detalle-item"><label>Fecha Reporte</label><span>${r.fecha}</span></div>
+            ${r.fechaResolucion ? `<div class="detalle-item"><label>Fecha Resolución</label><span>${r.fechaResolucion}</span></div>` : ''}
+        </div>
+        <div style="margin-bottom:14px">
+            <div style="font-size:0.82rem;font-weight:700;color:var(--texto-suave);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">Descripción</div>
+            <div style="background:var(--gris);border-radius:8px;padding:14px;font-size:0.88rem;line-height:1.6">${r.descripcion}</div>
+        </div>
+        ${r.notaTecnica ? `
+        <div>
+            <div style="font-size:0.82rem;font-weight:700;color:var(--texto-suave);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">Nota Técnica</div>
+            <div style="background:#fff3cd;border-radius:8px;padding:14px;font-size:0.88rem;line-height:1.6">${r.notaTecnica}</div>
+        </div>` : ''}`;
+    document.getElementById('modalDetalle').classList.add('abierto');
+}
+
+function filtrarLista(tipo, campo, valor) {
+    filtrosActivos[tipo] = filtrosActivos[tipo] || {};
+    filtrosActivos[tipo][campo] = valor;
+    const f = filtrosActivos[tipo];
+    renderLista(tipo, f.estado||'', f.prioridad||'', tipo==='todos' ? busqueda : '');
+}
+function buscarReportes(q) { busqueda = q; renderLista('todos', filtrosActivos.todos?.estado||'', filtrosActivos.todos?.prioridad||'', q); }
+
+function mostrarSeccion(id) {
+    document.querySelectorAll('.page-section').forEach(s => s.classList.remove('activa'));
+    document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+    document.getElementById(`sec-${id}`)?.classList.add('activa');
+    document.getElementById(`link-${id}`)?.classList.add('active');
+    const t = { resumen:'📊 Resumen', pendientes:'🔴 Pendientes', recibidos:'📬 Recibidos', en_proceso:'⚙️ En Proceso', resueltos:'✅ Resueltos', todos:'📋 Todos los Reportes' };
+    document.getElementById('topBarTitle').textContent = t[id]||'Panel';
+    if (window.innerWidth<=768) document.getElementById('sidebar').classList.remove('abierta');
+}
+function cerrarSesion() { if(confirm('¿Cerrar sesión?')) { localStorage.removeItem('eduspace_sesion'); window.location.href='index.html'; } }
+function cerrarModal(id) { document.getElementById(id).classList.remove('abierto'); }
+function cerrarModalFuera(e,id) { if(e.target.id===id) cerrarModal(id); }
+function toggleSidebar() { document.getElementById('sidebar').classList.toggle('abierta'); }
+function mostrarToast(msg,tipo='info') {
+    const t=document.getElementById('toast'); t.textContent=msg;
+    const c={success:'#28a745',error:'#BF1120',info:'#034C8C'};
+    t.style.background=c[tipo]||c.info; t.classList.add('show');
+    setTimeout(()=>t.classList.remove('show'),3500);
+}
+</script>
+</body>
+</html>
